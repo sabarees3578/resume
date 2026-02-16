@@ -37,7 +37,12 @@ export const Skills: React.FC = () => {
     {
       category: 'Tools & Platforms',
       variant: 'white' as const,
-      skills: ['Git', 'VS Code', 'Docker', 'Linux', 'Arduino IDE', 'Postman']
+      skills: ['Git', 'VS Code', 'Docker', 'Linux', 'Arduino IDE', 'Postman','RoboDB','Webbot]
+    },
+     {
+      category: 'Robotics',
+      variant: 'white' as const,
+      skills: ['Robotdk', 'Webot', 'Roboguide', 'Linux', 'Arduino IDE']
     }
   ];
 
