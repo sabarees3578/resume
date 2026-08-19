@@ -28,7 +28,7 @@ function App() {
     <div className="min-h-screen bg-zinc-950">
       <Header currentPage={currentPage} onNavigate={setCurrentPage} />
       <main>{renderPage()}</main>
-      <Footer />
+      <Footer onNavigate={setCurrentPage} />
     </div>
   );
 }
