@@ -116,11 +116,11 @@ const StatCounter: React.FC<{ value: number; suffix: string; label: string }> = 
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+      <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-pink-200">
         {count}
         {suffix}
       </div>
-      <div className="text-xs text-zinc-400 mt-1.5 font-medium uppercase tracking-widest">{label}</div>
+      <div className="text-xs text-indigo-200/80 mt-1.5 font-medium uppercase tracking-widest">{label}</div>
     </div>
   );
 };
@@ -144,23 +144,23 @@ const DomainCard: React.FC<{
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative group text-left rounded-2xl border p-6 transition-all duration-500 cursor-pointer bg-zinc-900/60 backdrop-blur-sm animate-fade-up ${borderColor}`}
+      className={`relative group text-left rounded-2xl border p-6 transition-all duration-500 cursor-pointer bg-indigo-950/55 hover:bg-indigo-950/75 backdrop-blur-xl animate-fade-up ${borderColor}`}
       style={{
         animationDelay: delay,
         transform: hovered ? 'translateY(-8px) scale(1.02)' : 'translateY(0) scale(1)',
-        boxShadow: hovered ? glowColor : '0 0 0 rgba(0,0,0,0)',
+        boxShadow: hovered ? glowColor : '0 12px 32px rgba(15,23,42,0.35)',
       }}
     >
       <div
         className={`absolute inset-0 rounded-2xl transition-opacity duration-500 bg-gradient-to-br ${iconBg} pointer-events-none`}
-        style={{ opacity: hovered ? 0.08 : 0 }}
+        style={{ opacity: hovered ? 0.1 : 0 }}
       />
 
-      <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/10`}>{icon}</div>
-      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">{title}</h3>
-      <p className="text-zinc-400 text-sm leading-relaxed pr-4">{desc}</p>
+      <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/15`}>{icon}</div>
+      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">{title}</h3>
+      <p className="text-zinc-200/85 text-sm leading-relaxed pr-4">{desc}</p>
 
-      <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 group-hover:text-white transition-colors">
+      <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-200 group-hover:text-white transition-colors">
         <span>Explore projects</span>
         <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
       </div>
@@ -328,9 +328,10 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   texts={ROLES}
                   effect="blur"
                   splitBy="words"
-                  staggerDuration={0.02}
+                  staggerDuration={0}
                   rotationInterval={2600}
-                  transition={{ duration: 0.25 }}
+                  transition={{ duration: 0.18 }}
+                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
                   pauseOnHover
                   mainClassName="text-base sm:text-lg font-semibold text-cyan-100"
                 />
@@ -440,7 +441,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
       {/* ── STATS BAR ── */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-zinc-800/60 rounded-2xl overflow-hidden border border-zinc-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-indigo-300/15 rounded-2xl overflow-hidden border border-indigo-300/20 shadow-[0_20px_50px_rgba(15,23,42,0.45)] backdrop-blur-xl">
           {[
             { value: 15, suffix: '+', label: 'Projects Built' },
             { value: 6, suffix: '+', label: 'Tech Domains' },
@@ -449,7 +450,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-zinc-950/85 backdrop-blur-sm py-8 px-4 hover:bg-zinc-900/80 transition-colors duration-300"
+              className="bg-indigo-950/55 py-8 px-4 hover:bg-indigo-900/55 transition-colors duration-300"
             >
               <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
             </div>
@@ -466,7 +467,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           <div className="animate-ticker">
             {[...TECH_STACK, ...TECH_STACK].map((tech, idx) => (
               <div key={`${tech}-${idx}`} className="pr-5 flex-shrink-0">
-                <span className="inline-block px-5 py-2 bg-zinc-900/90 border border-zinc-800 rounded-full text-zinc-400 text-sm font-medium hover:border-blue-500/50 hover:text-blue-400 transition-colors duration-200 cursor-default">
+                <span className="inline-block px-5 py-2 bg-indigo-950/55 border border-indigo-300/20 rounded-full text-indigo-100 text-sm font-medium hover:border-cyan-300/60 hover:text-white transition-colors duration-200 cursor-default backdrop-blur-md">
                   {tech}
                 </span>
               </div>
@@ -478,12 +479,14 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       {/* ── DOMAIN CARDS ── */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-400 text-xs font-semibold uppercase tracking-widest mb-4">
-            <CircuitBoard size={12} className="text-blue-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-indigo-100 text-xs font-semibold uppercase tracking-widest mb-4 backdrop-blur-md">
+            <CircuitBoard size={13} className="text-cyan-300" />
             Areas of Expertise
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">What I Build</h2>
-          <p className="text-zinc-400 mt-3 max-w-xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+            What I Build
+          </h2>
+          <p className="text-zinc-100/90 mt-3 max-w-xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]">
             Cross-disciplinary engineering from the silicon layer to the cloud — click any domain to explore related projects.
           </p>
         </div>
@@ -509,16 +512,18 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-semibold uppercase tracking-widest mb-3">
-              <Layers size={12} />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-widest mb-3 backdrop-blur-md">
+              <Layers size={13} />
               Spotlight
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Featured Work &amp; Current Focus</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+              Featured Work &amp; Current Focus
+            </h2>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('Projects')}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-950/60 hover:bg-indigo-900/70 border border-indigo-300/25 text-sm font-semibold text-cyan-200 hover:text-white transition-all self-start md:self-auto backdrop-blur-md"
           >
             View all projects
             <ArrowRight size={16} />
@@ -539,7 +544,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   onNavigate('Projects', { category: item.category });
                 }
               }}
-              className={`group rounded-2xl border bg-zinc-900/50 hover:bg-zinc-900/80 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
+              className={`group rounded-2xl border bg-indigo-950/55 hover:bg-indigo-950/75 p-6 backdrop-blur-xl shadow-[0_12px_36px_rgba(15,23,42,0.4)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
@@ -548,19 +553,19 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   </span>
                   <ArrowUpRight
                     size={16}
-                    className="text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                    className="text-indigo-200/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
                   />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-zinc-400 leading-relaxed mb-5">{item.summary}</p>
+                <p className="text-sm text-zinc-200/85 leading-relaxed mb-5">{item.summary}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {item.stack.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2.5 py-1 rounded-md bg-zinc-950 border border-zinc-800 text-[11px] font-mono text-zinc-300"
+                    className="px-2.5 py-1 rounded-md bg-indigo-950/80 border border-indigo-300/20 text-[11px] font-mono text-indigo-100"
                   >
                     {tech}
                   </span>
@@ -572,27 +577,27 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
         {/* Current Experience Snapshot */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 flex items-start gap-4 hover:border-blue-500/40 transition-colors">
-            <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0">
+          <div className="rounded-2xl border border-indigo-300/20 bg-indigo-950/55 backdrop-blur-xl p-6 flex items-start gap-4 hover:border-cyan-300/50 transition-colors shadow-[0_12px_36px_rgba(15,23,42,0.4)]">
+            <div className="p-3 rounded-xl bg-blue-500/15 border border-blue-400/30 text-cyan-300 shrink-0">
               <Briefcase size={20} />
             </div>
             <div>
-              <div className="text-xs font-mono text-blue-400 mb-1">Jan 2024 – Present</div>
+              <div className="text-xs font-mono text-cyan-200 mb-1">Jan 2024 – Present</div>
               <h3 className="text-base font-bold text-white">Founder &amp; Lead Developer — godem.in</h3>
-              <p className="text-sm text-zinc-400 mt-1.5 leading-relaxed">
+              <p className="text-sm text-zinc-200/85 mt-1.5 leading-relaxed">
                 Building an open-source, AI-integrated IDE and IoT platform designed for hobbyists and makers, spanning system architecture to silicon-to-cloud tooling.
               </p>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 flex items-start gap-4 hover:border-purple-500/40 transition-colors">
-            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 shrink-0">
+          <div className="rounded-2xl border border-indigo-300/20 bg-indigo-950/55 backdrop-blur-xl p-6 flex items-start gap-4 hover:border-purple-400/50 transition-colors shadow-[0_12px_36px_rgba(15,23,42,0.4)]">
+            <div className="p-3 rounded-xl bg-purple-500/15 border border-purple-400/30 text-purple-300 shrink-0">
               <Wifi size={20} />
             </div>
             <div>
-              <div className="text-xs font-mono text-purple-400 mb-1">Mar 2025 – Jul 2026</div>
+              <div className="text-xs font-mono text-purple-200 mb-1">Mar 2025 – Jul 2026</div>
               <h3 className="text-base font-bold text-white">Technical Engineer — Enthu Technology Solutions</h3>
-              <p className="text-sm text-zinc-400 mt-1.5 leading-relaxed">
+              <p className="text-sm text-zinc-200/85 mt-1.5 leading-relaxed">
                 Deploying industrial LoRaWAN gateways and end-nodes with ChirpStack network servers, optimizing packet reliability and real-time sensor dashboards.
               </p>
             </div>
@@ -602,16 +607,16 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
       {/* ── BOTTOM CTA ── */}
       <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="relative rounded-3xl border border-zinc-700/60 bg-zinc-900/60 backdrop-blur-md p-10 md:p-12 text-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-purple-600/10 pointer-events-none" />
-          <Server size={40} className="text-blue-500 mx-auto mb-5" />
+        <div className="relative rounded-3xl border border-indigo-300/25 bg-indigo-950/60 backdrop-blur-xl p-10 md:p-12 text-center overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.55)]">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/15 via-transparent to-pink-500/15 pointer-events-none" />
+          <Server size={40} className="text-cyan-300 mx-auto mb-5" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Let&apos;s Build Something{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-sky-200 to-pink-200">
               Extraordinary
             </span>
           </h2>
-          <p className="text-zinc-400 text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-zinc-200/90 text-lg mb-8 max-w-xl mx-auto">
             Whether it&apos;s a smart IoT product, a robotics system, or a full-stack web application — I&apos;m ready
             to engineer it with you.
           </p>
@@ -619,7 +624,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('Projects')}
-              className="group flex items-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:scale-[1.02]"
+              className="group flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 border border-indigo-400/35 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(99,102,241,0.4)] hover:shadow-[0_0_32px_rgba(129,140,248,0.6)] hover:scale-[1.02]"
             >
               Explore My Work
               <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -627,7 +632,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('Skills')}
-              className="px-7 py-3.5 bg-zinc-950/60 border border-zinc-700 hover:border-zinc-500 text-zinc-200 hover:text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02]"
+              className="px-7 py-3.5 bg-indigo-950/60 hover:bg-indigo-900/70 border border-indigo-300/25 hover:border-indigo-300/50 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
             >
               View Skills
             </button>
