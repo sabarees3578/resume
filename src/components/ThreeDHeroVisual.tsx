@@ -12,8 +12,8 @@ interface Node {
   glowColor: string;
   borderColor: string;
   activeBg: string;
-  cx: number; // SVG center x %
-  cy: number; // SVG center y %
+  cx: number;
+  cy: number;
   techStack: string;
 }
 
@@ -24,11 +24,12 @@ const NODES: Node[] = [
     sublabel: 'Embedded',
     icon: <Wifi size={16} />,
     color: 'text-blue-400',
-    glowColor: 'rgba(59,130,246,0.5)',
+    glowColor: 'rgba(59,130,246,0.55)',
     borderColor: 'border-blue-500/50',
     activeBg: 'bg-blue-600 border-blue-400',
-    cx: 18, cy: 28,
-    techStack: 'ESP32 • Arduino • MQTT • Sensors',
+    cx: 18,
+    cy: 28,
+    techStack: 'ESP32 • Arduino • MQTT • LoRaWAN',
   },
   {
     id: 'fullstack',
@@ -36,10 +37,11 @@ const NODES: Node[] = [
     sublabel: 'Web Dev',
     icon: <Code size={16} />,
     color: 'text-purple-400',
-    glowColor: 'rgba(168,85,247,0.5)',
+    glowColor: 'rgba(168,85,247,0.55)',
     borderColor: 'border-purple-500/50',
     activeBg: 'bg-purple-600 border-purple-400',
-    cx: 82, cy: 28,
+    cx: 82,
+    cy: 28,
     techStack: 'React • Node.js • WebSockets • REST',
   },
   {
@@ -48,11 +50,12 @@ const NODES: Node[] = [
     sublabel: 'CAD & Sim',
     icon: <Bot size={16} />,
     color: 'text-emerald-400',
-    glowColor: 'rgba(52,211,153,0.5)',
+    glowColor: 'rgba(52,211,153,0.55)',
     borderColor: 'border-emerald-500/50',
     activeBg: 'bg-emerald-600 border-emerald-400',
-    cx: 18, cy: 78,
-    techStack: 'Webots • RobotDK • PCB • 3D Print',
+    cx: 18,
+    cy: 78,
+    techStack: 'Webots • RobotDK • PCB • OpenCV',
   },
   {
     id: 'mobile',
@@ -60,36 +63,35 @@ const NODES: Node[] = [
     sublabel: 'Android',
     icon: <Smartphone size={16} />,
     color: 'text-orange-400',
-    glowColor: 'rgba(251,146,60,0.5)',
+    glowColor: 'rgba(251,146,60,0.55)',
     borderColor: 'border-orange-500/50',
     activeBg: 'bg-orange-600 border-orange-400',
-    cx: 82, cy: 78,
+    cx: 82,
+    cy: 78,
     techStack: 'Android Studio • React Native • Firebase',
   },
 ];
 
-// Animated data packet flowing along an SVG path
 const DataPacket: React.FC<{ pathId: string; color: string; duration: number; delay: number }> = ({
-  pathId, color, duration, delay,
+  pathId,
+  color,
+  duration,
+  delay,
 }) => (
-  <circle r="4" fill={color} opacity="0.9">
-    <animateMotion
-      dur={`${duration}s`}
-      begin={`${delay}s`}
-      repeatCount="indefinite"
-      calcMode="linear"
-    >
+  <circle r="3.5" fill={color} opacity="0.9">
+    <animateMotion dur={`${duration}s`} begin={`${delay}s`} repeatCount="indefinite" calcMode="linear">
       <mpath href={`#${pathId}`} />
     </animateMotion>
     <animate attributeName="opacity" values="0;1;1;0" dur={`${duration}s`} begin={`${delay}s`} repeatCount="indefinite" />
-    <animate attributeName="r" values="2;4;2" dur={`${duration}s`} begin={`${delay}s`} repeatCount="indefinite" />
+    <animate attributeName="r" values="2;3.8;2" dur={`${duration}s`} begin={`${delay}s`} repeatCount="indefinite" />
   </circle>
 );
 
-// Connection line with animated dash and glowing packet
 const ConnectionLine: React.FC<{
-  fromCx: number; fromCy: number;
-  toCx: number; toCy: number;
+  fromCx: number;
+  fromCy: number;
+  toCx: number;
+  toCy: number;
   id: string;
   color: string;
   packetColor: string;
@@ -97,43 +99,34 @@ const ConnectionLine: React.FC<{
   duration: number;
   delay: number;
 }> = ({ fromCx, fromCy, toCx, toCy, id, color, packetColor, active, duration, delay }) => {
-  // Midpoint for bezier curve control
   const mx = (fromCx + toCx) / 2;
   const my = (fromCy + toCy) / 2;
   const d = `M ${fromCx} ${fromCy} Q ${mx} ${my + 8} ${toCx} ${toCy}`;
 
   return (
     <g>
-      {/* Base dim line */}
       <path
         id={id}
         d={d}
         fill="none"
         stroke={color}
         strokeWidth={active ? '1.5' : '0.8'}
-        strokeOpacity={active ? 0.7 : 0.2}
+        strokeOpacity={active ? 0.75 : 0.22}
         strokeDasharray="6 4"
         style={{ transition: 'all 0.4s ease' }}
       >
-        <animate
-          attributeName="stroke-dashoffset"
-          values="0;-20"
-          dur="1.5s"
-          repeatCount="indefinite"
-        />
+        <animate attributeName="stroke-dashoffset" values="0;-20" dur="1.5s" repeatCount="indefinite" />
       </path>
-      {/* Glow line when active */}
       {active && (
         <path
           d={d}
           fill="none"
           stroke={color}
           strokeWidth="3"
-          strokeOpacity="0.15"
+          strokeOpacity="0.18"
           filter={`drop-shadow(0 0 4px ${packetColor})`}
         />
       )}
-      {/* Moving data packets */}
       <DataPacket pathId={id} color={packetColor} duration={duration} delay={delay} />
       <DataPacket pathId={id} color={packetColor} duration={duration} delay={delay + duration / 2} />
     </g>
@@ -145,30 +138,43 @@ export const ThreeDHeroVisual: React.FC = () => {
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [activeNode, setActiveNode] = useState<NodeId>('iot');
+  const [isPaused, setIsPaused] = useState(false);
   const [tick, setTick] = useState(0);
 
-  // Heartbeat tick for live activity
   useEffect(() => {
-    const t = setInterval(() => setTick(v => v + 1), 1200);
+    const t = setInterval(() => setTick((v) => v + 1), 1200);
     return () => clearInterval(t);
   }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const cycle = setInterval(() => {
+      setActiveNode((prev) => {
+        const idx = NODES.findIndex((n) => n.id === prev);
+        return NODES[(idx + 1) % NODES.length].id;
+      });
+    }, 3600);
+    return () => clearInterval(cycle);
+  }, [isPaused]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const rY = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 14;
-    const rX = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 14;
+    const rY = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 12;
+    const rX = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 12;
     setRotateX(rX);
     setRotateY(rY);
   };
 
-  const handleMouseLeave = () => { setRotateX(0); setRotateY(0); };
+  const handleMouseEnter = () => setIsPaused(true);
 
-  const activeNodeData = NODES.find(n => n.id === activeNode)!;
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+    setIsPaused(false);
+  };
 
-  // SVG viewBox dimensions
-  const VW = 100;
-  const VH = 100;
+  const activeNodeData = NODES.find((n) => n.id === activeNode)!;
   const chipCx = 50;
   const chipCy = 53;
 
@@ -176,6 +182,7 @@ export const ThreeDHeroVisual: React.FC = () => {
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative w-full max-w-[440px] select-none"
       style={{ perspective: '900px' }}
@@ -183,7 +190,10 @@ export const ThreeDHeroVisual: React.FC = () => {
       {/* Outer ambient glow */}
       <div
         className="absolute -inset-4 rounded-3xl blur-3xl -z-10 transition-all duration-700"
-        style={{ background: `radial-gradient(ellipse at center, ${activeNodeData.glowColor} 0%, transparent 70%)`, opacity: 0.35 }}
+        style={{
+          background: `radial-gradient(ellipse at center, ${activeNodeData.glowColor} 0%, transparent 70%)`,
+          opacity: 0.35,
+        }}
       />
 
       {/* 3D Card */}
@@ -193,12 +203,17 @@ export const ThreeDHeroVisual: React.FC = () => {
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
           transition: 'transform 0.15s ease-out',
-          boxShadow: `0 0 0 1px rgba(255,255,255,0.04), 0 25px 60px rgba(0,0,0,0.7), 0 0 40px ${activeNodeData.glowColor}33`,
+          boxShadow: `0 0 0 1px rgba(255,255,255,0.04), 0 25px 60px rgba(0,0,0,0.7), 0 0 40px ${activeNodeData.glowColor}`,
         }}
       >
         {/* Dot-grid background */}
-        <div className="absolute inset-0 opacity-[0.12]"
-          style={{ backgroundImage: 'radial-gradient(#60a5fa 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: 'radial-gradient(#60a5fa 1px, transparent 1px)',
+            backgroundSize: '18px 18px',
+          }}
+        />
 
         {/* Corner accent marks */}
         {[
@@ -210,7 +225,7 @@ export const ThreeDHeroVisual: React.FC = () => {
           <div key={i} className={`absolute w-4 h-4 ${cls} border-blue-500/40 rounded-sm`} />
         ))}
 
-        {/* ── Header Bar ── */}
+        {/* Header Bar */}
         <div
           className="relative z-10 flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/80"
           style={{ transform: 'translateZ(20px)' }}
@@ -230,77 +245,107 @@ export const ThreeDHeroVisual: React.FC = () => {
               <span className="text-[10px] font-mono">LIVE</span>
             </div>
             <div className="flex gap-1">
-              {['bg-red-500','bg-yellow-500','bg-green-500'].map(c => (
+              {['bg-red-500', 'bg-yellow-500', 'bg-green-500'].map((c) => (
                 <div key={c} className={`w-2.5 h-2.5 rounded-full ${c} opacity-70`} />
               ))}
             </div>
           </div>
         </div>
 
-        {/* ── SVG Circuit Layer ── */}
+        {/* SVG Circuit Layer */}
         <div className="relative" style={{ transform: 'translateZ(40px)' }}>
           <svg
-            viewBox={`0 0 ${VW} ${VH}`}
+            viewBox="0 0 100 100"
             className="absolute inset-0 w-full h-full z-10 pointer-events-none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ height: '100%', position: 'absolute' }}
           >
-            <defs>
-              <filter id="glow-blue">
-                <feGaussianBlur stdDeviation="1.5" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-              <filter id="glow-purple">
-                <feGaussianBlur stdDeviation="1.5" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-
-            {/* Lines from chip to each node */}
-            <ConnectionLine fromCx={chipCx} fromCy={chipCy} toCx={NODES[0].cx} toCy={NODES[0].cy}
-              id="line-iot"      color="#3b82f6" packetColor="#60a5fa" active={activeNode==='iot'}      duration={2}   delay={0} />
-            <ConnectionLine fromCx={chipCx} fromCy={chipCy} toCx={NODES[1].cx} toCy={NODES[1].cy}
-              id="line-fs"       color="#a855f7" packetColor="#c084fc" active={activeNode==='fullstack'} duration={2.3} delay={0.4} />
-            <ConnectionLine fromCx={chipCx} fromCy={chipCy} toCx={NODES[2].cx} toCy={NODES[2].cy}
-              id="line-rob"      color="#34d399" packetColor="#6ee7b7" active={activeNode==='robotics'}  duration={1.8} delay={0.8} />
-            <ConnectionLine fromCx={chipCx} fromCy={chipCy} toCx={NODES[3].cx} toCy={NODES[3].cy}
-              id="line-mob"      color="#fb923c" packetColor="#fdba74" active={activeNode==='mobile'}    duration={2.1} delay={0.2} />
+            <ConnectionLine
+              fromCx={chipCx}
+              fromCy={chipCy}
+              toCx={NODES[0].cx}
+              toCy={NODES[0].cy}
+              id="line-iot"
+              color="#3b82f6"
+              packetColor="#60a5fa"
+              active={activeNode === 'iot'}
+              duration={2}
+              delay={0}
+            />
+            <ConnectionLine
+              fromCx={chipCx}
+              fromCy={chipCy}
+              toCx={NODES[1].cx}
+              toCy={NODES[1].cy}
+              id="line-fs"
+              color="#a855f7"
+              packetColor="#c084fc"
+              active={activeNode === 'fullstack'}
+              duration={2.3}
+              delay={0.4}
+            />
+            <ConnectionLine
+              fromCx={chipCx}
+              fromCy={chipCy}
+              toCx={NODES[2].cx}
+              toCy={NODES[2].cy}
+              id="line-rob"
+              color="#34d399"
+              packetColor="#6ee7b7"
+              active={activeNode === 'robotics'}
+              duration={1.8}
+              delay={0.8}
+            />
+            <ConnectionLine
+              fromCx={chipCx}
+              fromCy={chipCy}
+              toCx={NODES[3].cx}
+              toCy={NODES[3].cy}
+              id="line-mob"
+              color="#fb923c"
+              packetColor="#fdba74"
+              active={activeNode === 'mobile'}
+              duration={2.1}
+              delay={0.2}
+            />
           </svg>
 
-          {/* ── Chip Container ── */}
+          {/* Chip Container */}
           <div className="relative flex flex-col items-center justify-center py-14">
-            {/* Orbit rings */}
             <div className="absolute w-48 h-48 rounded-full border border-dashed border-blue-400/20 animate-[spin_22s_linear_infinite]" />
             <div className="absolute w-36 h-36 rounded-full border border-purple-400/20 animate-[spin_14s_linear_infinite_reverse]" />
 
-            {/* Chip */}
+            {/* Central MCU */}
             <div
-              className="relative z-20 w-28 h-28 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-transform duration-300 hover:scale-105"
+              className="relative z-20 w-28 h-28 rounded-2xl flex flex-col items-center justify-center text-center transition-transform duration-300 hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
                 border: `2px solid ${activeNodeData.glowColor}`,
-                boxShadow: `0 0 0 1px rgba(255,255,255,0.05), 0 0 30px ${activeNodeData.glowColor}50, inset 0 1px 0 rgba(255,255,255,0.08)`,
+                boxShadow: `0 0 0 1px rgba(255,255,255,0.05), 0 0 30px ${activeNodeData.glowColor}, inset 0 1px 0 rgba(255,255,255,0.08)`,
                 transform: 'translateZ(80px)',
               }}
             >
-              {/* Pins - top */}
+              {/* Pins */}
               <div className="absolute -top-[6px] flex justify-between w-[72px]">
-                {[...Array(5)].map((_,i) => <div key={i} className="w-[5px] h-[6px] bg-amber-400/80 rounded-t-sm" />)}
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-[5px] h-[6px] bg-amber-400/80 rounded-t-sm" />
+                ))}
               </div>
-              {/* Pins - bottom */}
               <div className="absolute -bottom-[6px] flex justify-between w-[72px]">
-                {[...Array(5)].map((_,i) => <div key={i} className="w-[5px] h-[6px] bg-amber-400/80 rounded-b-sm" />)}
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-[5px] h-[6px] bg-amber-400/80 rounded-b-sm" />
+                ))}
               </div>
-              {/* Pins - left */}
               <div className="absolute -left-[6px] flex flex-col justify-between h-[64px]">
-                {[...Array(4)].map((_,i) => <div key={i} className="h-[5px] w-[6px] bg-amber-400/80 rounded-l-sm" />)}
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-[5px] w-[6px] bg-amber-400/80 rounded-l-sm" />
+                ))}
               </div>
-              {/* Pins - right */}
               <div className="absolute -right-[6px] flex flex-col justify-between h-[64px]">
-                {[...Array(4)].map((_,i) => <div key={i} className="h-[5px] w-[6px] bg-amber-400/80 rounded-r-sm" />)}
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-[5px] w-[6px] bg-amber-400/80 rounded-r-sm" />
+                ))}
               </div>
 
-              {/* Inner chip surface lines */}
               <div className="absolute inset-3 border border-zinc-600/30 rounded-lg" />
               <div className="absolute inset-5 border border-zinc-700/20 rounded-md" />
 
@@ -309,47 +354,55 @@ export const ThreeDHeroVisual: React.FC = () => {
               <span className="font-mono text-[8px] text-zinc-500 mt-0.5">MCU-v2026</span>
             </div>
 
-            {/* 4 satellite node badges — positioned around chip via absolute + translate */}
+            {/* 4 satellite node badges */}
             {NODES.map((node) => {
               const isActive = activeNode === node.id;
-              // Place each node in one of 4 corners relative to chip
               const posClass = {
-                iot:       'top-5 left-4',
+                iot: 'top-5 left-4',
                 fullstack: 'top-5 right-4',
-                robotics:  'bottom-5 left-4',
-                mobile:    'bottom-5 right-4',
+                robotics: 'bottom-5 left-4',
+                mobile: 'bottom-5 right-4',
               }[node.id];
 
               return (
                 <button
                   key={node.id}
-                  onClick={() => setActiveNode(node.id)}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => {
+                    setActiveNode(node.id);
+                    setIsPaused(true);
+                  }}
                   className={`absolute z-30 ${posClass} flex flex-col items-center gap-1 px-3 py-2.5 rounded-2xl border-2
-                    font-mono text-[10px] cursor-pointer transition-all duration-350 backdrop-blur-sm
-                    ${isActive
-                      ? `${node.activeBg} text-white shadow-lg`
-                      : `bg-zinc-900/70 ${node.borderColor} ${node.color} hover:bg-zinc-800/80`
+                    font-mono text-[10px] cursor-pointer transition-all duration-300 backdrop-blur-sm
+                    ${
+                      isActive
+                        ? `${node.activeBg} text-white shadow-lg`
+                        : `bg-zinc-900/75 ${node.borderColor} ${node.color} hover:bg-zinc-800/90`
                     }`}
                   style={{
-                    boxShadow: isActive ? `0 0 20px ${node.glowColor}, 0 4px 15px rgba(0,0,0,0.5)` : '0 2px 8px rgba(0,0,0,0.4)',
+                    boxShadow: isActive
+                      ? `0 0 20px ${node.glowColor}, 0 4px 15px rgba(0,0,0,0.5)`
+                      : '0 2px 8px rgba(0,0,0,0.4)',
                     transform: isActive ? 'translateZ(100px) scale(1.08)' : 'translateZ(60px) scale(1)',
                   }}
                 >
                   <span className={`transition-colors ${isActive ? 'text-white' : node.color}`}>{node.icon}</span>
                   <span className="font-bold text-[10px] leading-none">{node.label}</span>
-                  <span className={`text-[8px] font-normal leading-none ${isActive ? 'text-white/70' : 'text-zinc-500'}`}>{node.sublabel}</span>
+                  <span className={`text-[8px] font-normal leading-none ${isActive ? 'text-white/80' : 'text-zinc-500'}`}>
+                    {node.sublabel}
+                  </span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* ── Active tech stack panel ── */}
+        {/* Active tech stack panel */}
         <div
-          className="relative z-10 mx-4 mb-4 rounded-2xl border border-zinc-700/60 overflow-hidden"
+          className="relative z-10 mx-4 mb-4 rounded-2xl border border-zinc-700/60 bg-zinc-950/60 overflow-hidden"
           style={{ transform: 'translateZ(30px)' }}
         >
-          {/* Coloured accent bar on left */}
           <div
             className="absolute left-0 top-0 bottom-0 w-[3px] transition-colors duration-500"
             style={{ background: activeNodeData.glowColor }}
@@ -358,16 +411,15 @@ export const ThreeDHeroVisual: React.FC = () => {
           <div className="px-4 py-3 pl-5 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 min-w-0">
               <Zap size={13} className="flex-shrink-0" style={{ color: activeNodeData.glowColor }} />
-              <span className="text-xs text-zinc-300 font-mono truncate">{activeNodeData.techStack}</span>
+              <span className="text-xs text-zinc-200 font-mono truncate">{activeNodeData.techStack}</span>
             </div>
-            {/* Heartbeat pulse bar */}
             <div className="flex items-end gap-[3px] flex-shrink-0 h-5">
-              {[3,5,2,7,4,6,3,5].map((h, i) => (
+              {[3, 5, 2, 7, 4, 6, 3, 5].map((h, i) => (
                 <div
                   key={i}
                   className="w-[3px] rounded-full transition-all duration-300"
                   style={{
-                    height: `${tick % 2 === 0 ? h + (i % 3) : h}px`,
+                    height: `${tick % 2 === 0 ? h + (i % 3) + 2 : h}px`,
                     background: activeNodeData.glowColor,
                     opacity: 0.7 + (i % 3) * 0.1,
                   }}
