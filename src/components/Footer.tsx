@@ -44,10 +44,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   const navLinks = [
-    { label: 'Home', page: 'Home', hint: 'Overview & domains' },
-    { label: 'Projects', page: 'Projects', hint: 'IoT, Web & Robotics' },
-    { label: 'Skills', page: 'Skills', hint: 'Technical stack' },
-    { label: 'Resume', page: 'Resume', hint: 'Experience & PDF' },
+    { label: 'Home', page: 'Home', hint: 'Overview & highlights' },
+    { label: 'Projects', page: 'Projects', hint: 'Personal builds & IEEE research' },
+    { label: 'Skills', page: 'Skills', hint: 'Full hardware-to-cloud stack' },
+    { label: 'Resume', page: 'Resume', hint: 'Profile, stack & PDF' },
   ];
 
   const socials = [
@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent blur-sm" />
       </div>
 
-      <div className="relative bg-zinc-950/90 border-t border-white/10">
+      <div className="relative bg-indigo-950/45 border-t border-white/20">
         {/* Subtle dot grid */}
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -106,40 +106,39 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     </span>{' '}
                     <span className="text-white">Rajendran</span>
                   </div>
-                  <div className="text-[11px] text-zinc-400 font-mono mt-1 uppercase tracking-widest">
-                    Multi-Discipline Engineer
+                  <div className="text-[11px] text-white/75 font-mono mt-1 uppercase tracking-widest">
+                    Hardware-to-Cloud Systems Engineer
                   </div>
                 </div>
               </div>
 
-              <p className="text-zinc-300 text-sm leading-relaxed max-w-sm">
-                Building intelligent hardware-software ecosystems — from embedded firmware and LoRaWAN
-                networks to full-stack web apps and robotic control systems.
+              <p className="text-white/90 text-sm leading-relaxed max-w-sm">
+                Independent Mechatronics builder and Founder @ Godem (godem.in) — building custom CNC hardware, KiCad PCBs, embedded firmware, Rust + Tauri IDEs, and self-hosted IoT infrastructure.
               </p>
 
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-zinc-300 text-xs">
-                  <MapPin size={13} className="text-cyan-300 flex-shrink-0" />
+                <div className="flex items-center gap-2 text-white/90 text-xs">
+                  <MapPin size={13} className="text-cyan-200 flex-shrink-0" />
                   <span>Tamil Nadu, India</span>
                 </div>
-                <div className="flex items-center gap-2 text-zinc-300 text-xs">
-                  <Clock size={13} className="text-cyan-300 flex-shrink-0" />
+                <div className="flex items-center gap-2 text-white/90 text-xs">
+                  <Clock size={13} className="text-cyan-200 flex-shrink-0" />
                   <span>Local time:</span>
                   <LiveClock />
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-300" />
                   </span>
-                  <span className="text-emerald-400 font-semibold">Available for hire</span>
+                  <span className="text-emerald-200 font-semibold">Independent Systems Builder • godem.in</span>
                 </div>
               </div>
             </div>
 
             {/* Quick Navigation column */}
             <div className="md:col-span-3 space-y-4">
-              <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-[0.18em]">
+              <h3 className="text-xs font-bold text-white/85 uppercase tracking-[0.18em]">
                 Explore
               </h3>
               <ul className="space-y-2.5">
@@ -148,17 +147,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <button
                       type="button"
                       onClick={() => onNavigate(item.page)}
-                      className="group w-full flex items-center justify-between text-left px-3 py-2 rounded-xl bg-zinc-900/75 hover:bg-zinc-900 border border-white/10 hover:border-indigo-400/40 transition-all duration-200"
+                      className="group w-full flex items-center justify-between text-left px-3 py-2 rounded-xl bg-white/12 hover:bg-white/20 border border-white/20 hover:border-white/45 transition-all duration-200"
                     >
                       <div>
-                        <div className="text-sm font-semibold text-white group-hover:text-cyan-200 transition-colors">
+                        <div className="text-sm font-semibold text-white group-hover:text-amber-200 transition-colors">
                           {item.label}
                         </div>
-                        <div className="text-[11px] text-zinc-400">{item.hint}</div>
+                        <div className="text-[11px] text-white/75">{item.hint}</div>
                       </div>
                       <ArrowUpRight
                         size={15}
-                        className="text-zinc-400 group-hover:text-cyan-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                        className="text-white/70 group-hover:text-amber-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
                       />
                     </button>
                   </li>
@@ -168,24 +167,24 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
             {/* Contact column */}
             <div className="md:col-span-4 space-y-5">
-              <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-[0.18em]">
+              <h3 className="text-xs font-bold text-white/85 uppercase tracking-[0.18em]">
                 Get In Touch
               </h3>
 
-              <div className="relative rounded-2xl border border-white/15 bg-zinc-900/75 p-5 overflow-hidden group hover:border-indigo-400/40 transition-colors duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="relative rounded-2xl border border-white/25 bg-white/12 p-5 overflow-hidden group hover:border-white/45 transition-colors duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-2">
-                    <Zap size={14} className="text-amber-300" />
+                    <Zap size={14} className="text-amber-200" />
                     <span className="text-sm font-bold text-white">Let&apos;s collaborate</span>
                   </div>
-                  <p className="text-zinc-300 text-xs leading-relaxed mb-4">
-                    Open to freelance projects, internships, and full-time engineering roles.
+                  <p className="text-white/90 text-xs leading-relaxed mb-4">
+                    Open to R&amp;D collaborations, custom hardware-to-cloud builds, and technical partnerships.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <a
                       href={`mailto:${CONTACT_EMAIL}`}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all duration-200 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-100 text-indigo-950 text-xs font-bold rounded-xl transition-all duration-200 shadow-md"
                     >
                       <Mail size={13} />
                       Send a message
@@ -195,11 +194,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       onClick={handleCopyEmail}
                       className={`inline-flex items-center gap-1.5 px-3 py-2 border text-xs font-semibold rounded-xl transition-colors ${
                         copied
-                          ? 'bg-emerald-500/20 border-emerald-400/50 text-emerald-200'
-                          : 'bg-zinc-800 hover:bg-zinc-700 border-white/15 text-zinc-200 hover:text-white'
+                          ? 'bg-emerald-500/25 border-emerald-300/60 text-emerald-100'
+                          : 'bg-white/15 hover:bg-white/25 border-white/25 text-white'
                       }`}
                     >
-                      {copied ? <Check size={13} className="text-emerald-300" /> : <Copy size={13} />}
+                      {copied ? <Check size={13} className="text-emerald-200" /> : <Copy size={13} />}
                       {copied ? 'Copied!' : 'Copy email'}
                     </button>
                   </div>
@@ -215,7 +214,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     aria-label={s.label}
                     title={s.label}
-                    className={`w-10 h-10 inline-flex items-center justify-center rounded-xl bg-zinc-900/80 border border-white/15 text-zinc-300 transition-all duration-200 hover:scale-105 ${s.color}`}
+                    className={`w-10 h-10 inline-flex items-center justify-center rounded-xl bg-white/15 border border-white/25 text-white transition-all duration-200 hover:scale-105 ${s.color}`}
                   >
                     {s.icon}
                   </a>
@@ -226,18 +225,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Bottom bar */}
           <div className="relative pt-6">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-zinc-400 text-xs font-mono">
+              <p className="text-white/80 text-xs font-mono">
                 © {new Date().getFullYear()} Sabarees Rajendran — All rights reserved.
               </p>
 
-              <div className="flex items-center gap-1.5 text-zinc-400 text-xs">
+              <div className="flex items-center gap-1.5 text-white/80 text-xs">
                 <span>Crafted with</span>
-                <Heart size={11} className="text-red-500 animate-pulse" fill="currentColor" />
+                <Heart size={11} className="text-rose-300 animate-pulse" fill="currentColor" />
                 <span>&amp;</span>
-                <Code2 size={11} className="text-cyan-300" />
+                <Code2 size={11} className="text-cyan-200" />
                 <span>in Tamil Nadu, India</span>
               </div>
             </div>
