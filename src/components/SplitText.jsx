@@ -92,11 +92,16 @@ const SplitText = ({
   useEffect(() => {
     if (fontsLoaded) return undefined;
     let active = true;
+    const timeout = setTimeout(() => {
+      if (active) setFontsLoaded(true);
+    }, 250);
     document.fonts.ready.then(() => {
+      clearTimeout(timeout);
       if (active) setFontsLoaded(true);
     });
     return () => {
       active = false;
+      clearTimeout(timeout);
     };
   }, [fontsLoaded]);
 

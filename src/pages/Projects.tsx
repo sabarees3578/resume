@@ -218,14 +218,17 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm font-semibold mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-cyan-200 text-sm font-semibold mb-5 backdrop-blur-md">
               <Code size={16} />
               Featured Work
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Projects</span>
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+              My{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-pink-200">
+                Projects
+              </span>
             </h1>
-            <p className="text-zinc-400 text-lg leading-relaxed">
+            <p className="text-zinc-200/90 text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
               A selection of my engineering work across hardware systems, embedded firmware, robotics, and full-stack web apps.
             </p>
           </div>
@@ -233,7 +236,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
           <button
             type="button"
             onClick={() => setIsAiModalOpen(true)}
-            className="group flex items-center gap-2 px-5 py-2.5 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/60 hover:border-blue-500/50 text-zinc-200 hover:text-blue-400 rounded-xl transition-all duration-300 backdrop-blur-sm shadow-lg"
+            className="group flex items-center gap-2 px-5 py-2.5 bg-indigo-950/65 hover:bg-indigo-900/75 border border-indigo-300/25 hover:border-cyan-300/50 text-zinc-100 hover:text-cyan-200 rounded-xl transition-all duration-300 backdrop-blur-xl shadow-lg"
           >
             <Sparkles size={18} className="text-yellow-400 group-hover:animate-pulse" />
             <span className="font-semibold text-sm">AI Project Suggester</span>
@@ -250,16 +253,16 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                   key={category}
                   type="button"
                   onClick={() => setActiveCategory(category)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 backdrop-blur-md ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-500'
-                      : 'bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700'
+                      ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.45)] border border-indigo-400/40'
+                      : 'bg-indigo-950/55 text-indigo-100/80 hover:text-white hover:bg-indigo-900/65 border border-indigo-300/20 hover:border-indigo-300/40'
                   }`}
                 >
                   <span>{category}</span>
                   <span
                     className={`px-1.5 py-0.5 rounded-full text-[11px] font-mono ${
-                      isActive ? 'bg-blue-500/50 text-white' : 'bg-zinc-800 text-zinc-500'
+                      isActive ? 'bg-white/20 text-white' : 'bg-indigo-950/80 text-indigo-200/70'
                     }`}
                   >
                     {categoryCounts[category]}
@@ -270,21 +273,21 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
           </div>
 
           <div className="relative w-full lg:w-72">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-200/70" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects or tech..."
               aria-label="Search projects or technologies"
-              className="w-full pl-10 pr-9 py-2.5 bg-zinc-900/70 border border-zinc-800 focus:border-blue-500/60 rounded-xl text-sm text-white placeholder:text-zinc-500 focus:outline-none transition-colors"
+              className="w-full pl-10 pr-9 py-2.5 bg-indigo-950/60 border border-indigo-300/25 focus:border-cyan-300/60 rounded-xl text-sm text-white placeholder:text-indigo-200/50 focus:outline-none transition-colors backdrop-blur-md"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-200/70 hover:text-white"
               >
                 <X size={15} />
               </button>
@@ -298,7 +301,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
             {filteredProjects.map((project, index) => (
               <div
                 key={project.title}
-                className="group relative flex flex-col justify-between bg-zinc-900/45 hover:bg-zinc-900/70 border border-zinc-800/80 hover:border-zinc-600/80 rounded-3xl p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 overflow-hidden animate-fade-up"
+                className="group relative flex flex-col justify-between bg-indigo-950/75 hover:bg-indigo-950/90 border border-indigo-300/20 hover:border-indigo-300/45 rounded-3xl p-8 shadow-[0_16px_40px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden animate-fade-up"
                 style={{ animationDelay: `${index * 0.06}s` }}
               >
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${project.bgGlow}`} />
@@ -306,19 +309,19 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-6">
                     <div
-                      className={`p-3 rounded-2xl bg-zinc-800/80 border border-zinc-700/50 ${project.iconColorClass} group-hover:scale-110 transition-transform duration-500 shadow-inner`}
+                      className={`p-3 rounded-2xl bg-indigo-950/80 border border-indigo-300/20 ${project.iconColorClass} group-hover:scale-110 transition-transform duration-500 shadow-inner`}
                     >
                       {project.icon}
                     </div>
-                    <span className="px-3 py-1 bg-zinc-800/60 rounded-full text-xs font-mono font-medium text-zinc-300 border border-zinc-700/40">
+                    <span className="px-3 py-1 bg-indigo-950/70 rounded-full text-xs font-mono font-medium text-indigo-100 border border-indigo-300/20">
                       {project.category}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-cyan-200 transition-colors duration-300">
                     {project.title}
                   </h3>
-                  <p className="text-zinc-400 leading-relaxed mb-6">{project.description}</p>
+                  <p className="text-zinc-200/85 leading-relaxed mb-6">{project.description}</p>
                 </div>
 
                 <div className="relative z-10">
@@ -326,7 +329,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1.5 bg-zinc-950/80 border border-zinc-800/80 rounded-lg text-xs font-medium text-zinc-300 flex items-center gap-1.5"
+                        className="px-3 py-1.5 bg-indigo-950/80 border border-indigo-300/20 rounded-lg text-xs font-medium text-indigo-100 flex items-center gap-1.5"
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${project.dotColorClass}`} />
                         {tech}
@@ -334,13 +337,13 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-3 pt-6 border-t border-zinc-800/60">
+                  <div className="flex items-center gap-3 pt-6 border-t border-white/10">
                     <button
                       type="button"
                       onClick={() => setSelectedProject(project)}
-                      className="flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950/80 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-600 text-zinc-200 font-semibold text-sm rounded-xl transition-all"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-indigo-950/75 hover:bg-indigo-900/75 border border-indigo-300/20 hover:border-indigo-300/45 text-zinc-100 font-semibold text-sm rounded-xl transition-all"
                     >
-                      <Layers size={16} className="text-blue-400" />
+                      <Layers size={16} className="text-cyan-300" />
                       Details
                     </button>
 
@@ -349,9 +352,9 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-sm rounded-xl transition-all duration-300 hover:shadow-lg group/btn"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 border border-indigo-400/35 text-white font-semibold text-sm rounded-xl transition-all duration-300 hover:shadow-[0_0_24px_rgba(99,102,241,0.45)] group/btn"
                       >
-                        <Github size={17} className="text-zinc-400 group-hover/btn:text-white transition-colors" />
+                        <Github size={17} className="text-indigo-100 group-hover/btn:text-white transition-colors" />
                         GitHub Profile
                       </a>
                     )}

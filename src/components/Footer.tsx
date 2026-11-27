@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent blur-sm" />
       </div>
 
-      <div className="relative bg-zinc-950/75 backdrop-blur-md">
+      <div className="relative bg-indigo-950/85">
         {/* Subtle dot grid */}
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"

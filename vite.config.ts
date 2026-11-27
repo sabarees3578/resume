@@ -13,4 +13,17 @@ export default defineConfig({
   optimizeDeps: {
     include: ['lucide-react', 'three', 'gsap', 'motion/react'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          three: ['three'],
+          gsap: ['gsap', '@gsap/react'],
+          motion: ['motion'],
+          icons: ['lucide-react'],
+        },
+      },
+    },
+  },
 });

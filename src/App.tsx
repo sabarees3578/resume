@@ -1,11 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { RisoDitherBackground } from './components/RisoDitherBackground';
 import { Home } from './pages/Home';
-import { Projects, type ProjectCategory } from './pages/Projects';
-import { Skills } from './pages/Skills';
-import { Resume } from './pages/Resume';
+import type { ProjectCategory } from './pages/Projects';
+
+const Projects = lazy(() => import('./pages/Projects').then((m) => ({ default: m.Projects })));
+const Skills = lazy(() => import('./pages/Skills').then((m) => ({ default: m.Skills })));
+const Resume = lazy(() => import('./pages/Resume').then((m) => ({ default: m.Resume })));
 
 export type PageName = 'Home' | 'Projects' | 'Skills' | 'Resume';
 
@@ -15,6 +17,14 @@ function getPageFromHash(): PageName {
   const raw = window.location.hash.replace('#', '').toLowerCase();
   const match = VALID_PAGES.find((p) => p.toLowerCase() === raw);
   return match ?? 'Home';
+}
+
+function PageLoader() {
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full border-2 border-indigo-400/30 border-t-cyan-300 animate-spin" />
+    </div>
+  );
 }
 
 function App() {
@@ -71,7 +81,9 @@ function App() {
       <RisoDitherBackground />
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
       <main key={currentPage} className="flex-1 animate-fade-up">
-        {renderPage()}
+        <Suspense fallback={<PageLoader />}>
+          {renderPage()}
+        </Suspense>
       </main>
       <Footer onNavigate={handleNavigate} />
     </div>

@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import Lanyard from '../components/Lanyard';
-import SplitText from '../components/SplitText';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import RotatingText from '../components/RotatingText';
 import { useCardBackImage } from '../lib/cardBackImage';
 import type { ProjectCategory } from './Projects';
@@ -9,6 +7,8 @@ import {
   ArrowRight, CircuitBoard, Wifi, Server, Briefcase,
   Copy, Check, Layers, ArrowUpRight, FileText
 } from 'lucide-react';
+
+const Lanyard = lazy(() => import('../components/Lanyard'));
 
 interface HomeProps {
   onNavigate: (page: string, options?: { category?: ProjectCategory }) => void;
@@ -42,47 +42,13 @@ const TECH_STACK = [
   'Firebase',
 ];
 
+const FOCUS_CHIPS: Array<{ label: string; category: ProjectCategory }> = [
+  { label: 'ESP32 & LoRaWAN', category: 'IoT' },
+  { label: 'React & Node.js', category: 'Web' },
+  { label: 'Robotics & CAD', category: 'Robotics' },
+];
+
 const CONTACT_EMAIL = 'sabareesgodkiller@gmail.com';
-
-// Deterministic memoized floating particle background
-const ParticleField: React.FC = () => {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 24 }, (_, i) => ({
-        id: i,
-        size: (i % 3) + 1.5,
-        left: ((i * 37 + 13) % 96) + 2,
-        duration: 14 + (i % 7) * 2.5,
-        delay: (i % 6) * 1.8,
-        opacity: 0.15 + (i % 4) * 0.08,
-      })),
-    []
-  );
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full bg-blue-400"
-          style={{
-            width: p.size,
-            height: p.size,
-            left: `${p.left}%`,
-            bottom: '-10px',
-            opacity: p.opacity,
-            animation: `particleMove ${p.duration}s linear ${p.delay}s infinite`,
-          }}
-        />
-      ))}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl animate-pulse"
-        style={{ animationDelay: '1s' }}
-      />
-    </div>
-  );
-};
 
 // Animated stat counter
 const StatCounter: React.FC<{ value: number; suffix: string; label: string }> = ({ value, suffix, label }) => {
@@ -116,61 +82,56 @@ const StatCounter: React.FC<{ value: number; suffix: string; label: string }> = 
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-pink-200">
+      <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-white to-cyan-200">
         {count}
         {suffix}
       </div>
-      <div className="text-xs text-indigo-200/80 mt-1.5 font-medium uppercase tracking-widest">{label}</div>
+      <div className="text-xs text-zinc-200 mt-1.5 font-semibold uppercase tracking-widest">{label}</div>
     </div>
   );
 };
 
-// Interactive domain card that navigates straight to filtered projects
+// Interactive CSS-driven domain card
 const DomainCard: React.FC<{
   icon: React.ReactNode;
   title: string;
   desc: string;
-  glowColor: string;
+  hoverShadow: string;
   borderColor: string;
   iconBg: string;
   delay: string;
   onClick: () => void;
-}> = ({ icon, title, desc, glowColor, borderColor, iconBg, delay, onClick }) => {
-  const [hovered, setHovered] = useState(false);
+}> = ({ icon, title, desc, hoverShadow, borderColor, iconBg, delay, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`relative group text-left rounded-2xl border p-6 transition-all duration-300 cursor-pointer bg-zinc-950/80 hover:bg-zinc-950/95 hover:-translate-y-2 hover:scale-[1.015] shadow-[0_12px_32px_rgba(0,0,0,0.45)] animate-fade-up ${borderColor} ${hoverShadow}`}
+    style={{ animationDelay: delay }}
+  >
+    <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/15`}>{icon}</div>
+    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-200 transition-colors">{title}</h3>
+    <p className="text-zinc-100/90 text-sm leading-relaxed pr-2">{desc}</p>
 
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`relative group text-left rounded-2xl border p-6 transition-all duration-500 cursor-pointer bg-indigo-950/55 hover:bg-indigo-950/75 backdrop-blur-xl animate-fade-up ${borderColor}`}
-      style={{
-        animationDelay: delay,
-        transform: hovered ? 'translateY(-8px) scale(1.02)' : 'translateY(0) scale(1)',
-        boxShadow: hovered ? glowColor : '0 12px 32px rgba(15,23,42,0.35)',
-      }}
-    >
-      <div
-        className={`absolute inset-0 rounded-2xl transition-opacity duration-500 bg-gradient-to-br ${iconBg} pointer-events-none`}
-        style={{ opacity: hovered ? 0.1 : 0 }}
-      />
-
-      <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/15`}>{icon}</div>
-      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">{title}</h3>
-      <p className="text-zinc-200/85 text-sm leading-relaxed pr-4">{desc}</p>
-
-      <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-200 group-hover:text-white transition-colors">
-        <span>Explore projects</span>
-        <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-      </div>
-    </button>
-  );
-};
+    <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-200 group-hover:text-white transition-colors">
+      <span>Explore projects</span>
+      <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+    </div>
+  </button>
+);
 
 export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   const cardBackImage = useCardBackImage();
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : true
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   const handleCopyEmail = async () => {
     try {
@@ -192,7 +153,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
     icon: React.ReactNode;
     title: string;
     desc: string;
-    glowColor: string;
+    hoverShadow: string;
     borderColor: string;
     iconBg: string;
     delay: string;
@@ -202,40 +163,40 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       icon: <Wifi size={28} className="text-blue-400" />,
       title: 'IoT & Embedded Systems',
       desc: 'ESP32, Arduino & Raspberry Pi firmware. MQTT, Bluetooth, LoRaWAN & sensor integration.',
-      glowColor: '0 8px 40px rgba(59,130,246,0.25)',
-      borderColor: 'border-blue-500/20 hover:border-blue-500/50',
-      iconBg: 'from-blue-600/30 to-blue-900/20 bg-blue-900/30',
-      delay: '0.1s',
+      hoverShadow: 'hover:shadow-[0_12px_36px_rgba(59,130,246,0.28)]',
+      borderColor: 'border-blue-400/25 hover:border-blue-400/60',
+      iconBg: 'bg-blue-900/40',
+      delay: '0.08s',
       category: 'IoT',
     },
     {
       icon: <Code size={28} className="text-purple-400" />,
       title: 'Full-Stack Web Dev',
       desc: 'React, Node.js, WebSockets & REST APIs. Real-time dashboards & developer tooling.',
-      glowColor: '0 8px 40px rgba(168,85,247,0.25)',
-      borderColor: 'border-purple-500/20 hover:border-purple-500/50',
-      iconBg: 'from-purple-600/30 to-purple-900/20 bg-purple-900/30',
-      delay: '0.2s',
+      hoverShadow: 'hover:shadow-[0_12px_36px_rgba(168,85,247,0.28)]',
+      borderColor: 'border-purple-400/25 hover:border-purple-400/60',
+      iconBg: 'bg-purple-900/40',
+      delay: '0.16s',
       category: 'Web',
     },
     {
       icon: <Bot size={28} className="text-emerald-400" />,
       title: 'Robotics & CAD',
       desc: 'Webots, RobotDK & Roboguide simulation. PCB design, 3D modeling & prototyping.',
-      glowColor: '0 8px 40px rgba(52,211,153,0.25)',
-      borderColor: 'border-emerald-500/20 hover:border-emerald-500/50',
-      iconBg: 'from-emerald-600/30 to-emerald-900/20 bg-emerald-900/30',
-      delay: '0.3s',
+      hoverShadow: 'hover:shadow-[0_12px_36px_rgba(52,211,153,0.28)]',
+      borderColor: 'border-emerald-400/25 hover:border-emerald-400/60',
+      iconBg: 'bg-emerald-900/40',
+      delay: '0.24s',
       category: 'Robotics',
     },
     {
       icon: <Smartphone size={28} className="text-orange-400" />,
       title: 'Mobile & Android',
       desc: 'Native Android & React Native apps. Hardware interface apps with Bluetooth & Wi-Fi control.',
-      glowColor: '0 8px 40px rgba(251,146,60,0.25)',
-      borderColor: 'border-orange-500/20 hover:border-orange-500/50',
-      iconBg: 'from-orange-600/30 to-orange-900/20 bg-orange-900/30',
-      delay: '0.4s',
+      hoverShadow: 'hover:shadow-[0_12px_36px_rgba(251,146,60,0.28)]',
+      borderColor: 'border-orange-400/25 hover:border-orange-400/60',
+      iconBg: 'bg-orange-900/40',
+      delay: '0.32s',
       category: 'Mobile',
     },
   ];
@@ -248,8 +209,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         'Unified studio bringing together PCB layout, circuit simulation, embedded IDE, and 3D hardware modeling in one workflow.',
       stack: ['React', 'Node.js', 'Electron', 'WebGL'],
       category: 'Web' as ProjectCategory,
-      accent: 'border-purple-500/30 hover:border-purple-400/60',
-      badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+      accent: 'border-purple-400/30 hover:border-purple-300/65',
+      badge: 'bg-purple-500/20 text-purple-200 border-purple-400/35',
     },
     {
       tag: 'Autonomous Robotics',
@@ -258,8 +219,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         'Computer-vision-guided autonomous landscaping platform combining Raspberry Pi OpenCV perception with precision motor control.',
       stack: ['Raspberry Pi', 'Python', 'OpenCV'],
       category: 'Robotics' as ProjectCategory,
-      accent: 'border-emerald-500/30 hover:border-emerald-400/60',
-      badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      accent: 'border-emerald-400/30 hover:border-emerald-300/65',
+      badge: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/35',
     },
     {
       tag: 'Embedded Wireless HID',
@@ -268,180 +229,196 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         'Custom 9-axis IMU air mouse powered by ESP32 and MPU9250 with low-latency wireless cursor control over BLE & Wi-Fi.',
       stack: ['ESP32', 'C++', 'MPU9250', 'Bluetooth'],
       category: 'IoT' as ProjectCategory,
-      accent: 'border-blue-500/30 hover:border-blue-400/60',
-      badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+      accent: 'border-blue-400/30 hover:border-blue-300/65',
+      badge: 'bg-blue-500/20 text-blue-200 border-blue-400/35',
     },
   ];
 
   return (
     <div className="relative min-h-screen bg-transparent overflow-x-hidden">
-      <ParticleField />
-
-      {/* Grid line background */}
-      <div
-        className="absolute inset-0 pointer-events-none z-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
-
       {/* ── HERO SECTION ── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20">
-        <div className="grid lg:grid-cols-2 gap-14 items-start">
-          {/* Left: Text content */}
-          <div className="space-y-6 pt-32 md:pt-40">
-            <h1 className="text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)]">
-              <span className="inline-flex flex-wrap sm:flex-nowrap items-baseline gap-x-3 sm:whitespace-nowrap">
-                <SplitText
-                  text="Sabarees"
-                  tag="span"
-                  textAlign="left"
-                  effect="rise"
-                  hoverEffect="lift"
-                  trigger="load"
-                  delay={40}
-                  duration={0.8}
-                  className="text-white"
-                />
-                <span
-                  className="text-transparent bg-clip-text animate-gradient-text"
-                  style={{
-                    backgroundImage: 'linear-gradient(270deg, #ffffff, #bae6fd, #fbcfe8, #ffffff)',
-                    backgroundSize: '200% 200%',
-                  }}
-                >
-                  Rajendran
-                </span>
-              </span>
-            </h1>
-
-            {/* Smooth rotating role pill */}
-            <div className="animate-fade-up-delay-2 flex items-center min-h-[40px] overflow-hidden">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-indigo-950/60 border border-indigo-400/30 backdrop-blur-md shadow-[0_8px_30px_rgba(15,23,42,0.5)]">
-                <span className="relative flex h-2 w-2 shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-300" />
-                </span>
-                <RotatingText
-                  texts={ROLES}
-                  effect="blur"
-                  splitBy="words"
-                  staggerDuration={0}
-                  rotationInterval={2600}
-                  transition={{ duration: 0.18 }}
-                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                  pauseOnHover
-                  mainClassName="text-base sm:text-lg font-semibold text-cyan-100"
-                />
-              </div>
-            </div>
-
-            <p className="animate-fade-up-delay-3 text-zinc-200 text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-              Engineering{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-sky-200 to-pink-200 font-semibold">
-                intelligent hardware-software ecosystems
-              </span>
-              . I build everything from IoT firmware and LoRaWAN deployments to robotic control systems,
-              real-time web dashboards, and Android apps.
-            </p>
-
-            {/* Quick focus chips */}
-            <div className="animate-fade-up-delay-3 flex flex-wrap gap-2">
-              {['ESP32 & LoRaWAN', 'React & Node.js', 'Robotics & CAD'].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full bg-indigo-950/45 border border-indigo-300/20 text-xs font-mono text-indigo-100/90 backdrop-blur-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="animate-fade-up-delay-4 flex flex-wrap items-center gap-3 pt-1">
-              <button
-                type="button"
-                onClick={() => onNavigate('Projects')}
-                className="group flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 border border-indigo-400/35 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(99,102,241,0.4)] hover:shadow-[0_0_32px_rgba(129,140,248,0.6)] hover:scale-[1.02] active:scale-95"
-              >
-                View Projects
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('Resume')}
-                className="flex items-center gap-2 px-6 py-3.5 bg-indigo-950/55 hover:bg-indigo-900/65 border border-indigo-300/20 hover:border-indigo-300/45 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 backdrop-blur-md"
-              >
-                <FileText size={17} className="text-indigo-200" />
-                View &amp; Download Resume
-              </button>
-            </div>
-
-            {/* Social quick links + copy email */}
-            <div className="animate-fade-up-delay-5 flex flex-wrap items-center gap-2.5 pt-2 border-t border-white/10 max-w-xl">
-              <span className="text-zinc-300 text-xs font-mono uppercase tracking-wider mr-1">
-                Connect
-              </span>
-              {quickLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target={link.href.startsWith('http') ? '_blank' : undefined}
-                  rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  aria-label={link.label}
-                  title={link.label}
-                  className="inline-flex p-2.5 rounded-xl bg-indigo-950/55 hover:bg-indigo-900/70 border border-indigo-300/20 hover:border-indigo-300/45 text-zinc-200 hover:text-white transition-all duration-200 hover:scale-105 backdrop-blur-md"
-                >
-                  {link.icon}
-                </a>
-              ))}
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-indigo-950/55 hover:bg-indigo-900/70 border border-indigo-300/20 hover:border-indigo-300/45 text-xs font-mono text-zinc-200 hover:text-white transition-all backdrop-blur-md"
-              >
-                {copiedEmail ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                {copiedEmail ? 'Email copied!' : CONTACT_EMAIL}
-              </button>
-            </div>
-          </div>
-
-          {/* Right: Interactive 3D Lanyard anchored to top */}
-          <div className="relative flex justify-center items-start">
-            <div className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 rounded-full bg-gradient-to-r from-transparent via-zinc-500/70 to-transparent z-10" />
-            <div className="w-full h-[580px] lg:h-[720px]">
+      <section className="relative z-10 w-full pb-12 md:pb-16">
+        {/* Full-site-width 3D Lanyard viewport on desktop (zero side clipping when dragging) */}
+        {isDesktop && (
+          <div className="absolute inset-0 z-20 pointer-events-none">
+            <Suspense fallback={null}>
               <Lanyard
                 frontImage="/card-front.jpg"
                 backImage={cardBackImage}
-                strapImage="/band.png"
                 imageFit="cover"
                 cardColor="#ffffff"
                 orientation="portrait"
                 finish="glossy"
                 cornerRadius={0.3}
                 size={0.56}
-                anchor="center"
-                strapLength={0.55}
+                anchor="right"
+                strapLength={0.52}
                 strapColor="#111111"
                 strapWidth={0.65}
                 metal="silver"
                 gravity={1}
                 damping={0.5}
                 elasticity={0.5}
-                breeze={0.5}
+                breeze={0.3}
                 interactive
                 intro
               />
+            </Suspense>
+          </div>
+        )}
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Text content */}
+            <div className="space-y-6 pt-28 md:pt-36">
+              <h1 className="animate-fade-up text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.75)]">
+                <span className="inline-flex flex-wrap sm:flex-nowrap items-baseline gap-x-3 sm:whitespace-nowrap">
+                  <span className="text-white">Sabarees</span>
+                  <span
+                    className="text-transparent bg-clip-text animate-gradient-text"
+                    style={{
+                      backgroundImage: 'linear-gradient(270deg, #fde047, #ffffff, #67e8f9, #fde047)',
+                      backgroundSize: '200% 200%',
+                    }}
+                  >
+                    Rajendran
+                  </span>
+                </span>
+              </h1>
+
+              {/* Smooth rotating role pill */}
+              <div className="animate-fade-up-delay-1 flex items-center min-h-[42px] overflow-hidden">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-950/85 border border-white/20 shadow-[0_8px_28px_rgba(0,0,0,0.5)]">
+                  <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-300" />
+                  </span>
+                  <RotatingText
+                    texts={ROLES}
+                    effect="blur"
+                    splitBy="words"
+                    staggerDuration={0}
+                    rotationInterval={2600}
+                    transition={{ duration: 0.18 }}
+                    exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                    pauseOnHover
+                    mainClassName="text-sm sm:text-base font-bold text-amber-200 whitespace-nowrap"
+                  />
+                </div>
+              </div>
+
+              <p className="animate-fade-up-delay-2 text-white/95 text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+                Engineering{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-cyan-200 font-bold">
+                  intelligent hardware-software ecosystems
+                </span>
+                . I build everything from IoT firmware and LoRaWAN deployments to robotic control systems,
+                real-time web dashboards, and Android apps.
+              </p>
+
+              {/* Clickable focus chips */}
+              <div className="animate-fade-up-delay-3 flex flex-wrap gap-2">
+                {FOCUS_CHIPS.map((chip) => (
+                  <button
+                    key={chip.label}
+                    type="button"
+                    onClick={() => onNavigate('Projects', { category: chip.category })}
+                    className="px-3.5 py-1.5 rounded-full bg-zinc-950/80 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-xs font-mono text-white hover:text-amber-200 transition-all"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="animate-fade-up-delay-4 flex flex-wrap items-center gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('Projects')}
+                  className="group flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-amber-100 text-zinc-950 font-extrabold rounded-xl transition-all duration-300 shadow-[0_0_28px_rgba(255,255,255,0.3)] hover:shadow-[0_0_34px_rgba(253,224,71,0.5)] hover:scale-[1.02] active:scale-95"
+                >
+                  View Projects
+                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('Resume')}
+                  className="flex items-center gap-2 px-6 py-3.5 bg-zinc-950/85 hover:bg-zinc-900 border border-white/25 hover:border-cyan-300/60 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                >
+                  <FileText size={17} className="text-cyan-200" />
+                  View &amp; Download Resume
+                </button>
+              </div>
+
+              {/* Social quick links + copy email */}
+              <div className="animate-fade-up-delay-5 flex flex-wrap items-center gap-2.5 pt-3 border-t border-white/20 max-w-xl">
+                <span className="text-white/90 text-xs font-mono uppercase tracking-wider mr-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
+                  Connect
+                </span>
+                {quickLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.href.startsWith('http') ? '_blank' : undefined}
+                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    aria-label={link.label}
+                    title={link.label}
+                    className="inline-flex p-2.5 rounded-xl bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-white hover:text-amber-200 transition-all duration-200 hover:scale-105"
+                  >
+                    {link.icon}
+                  </a>
+                ))}
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-cyan-300/60 text-xs font-mono text-white hover:text-cyan-200 transition-all"
+                >
+                  {copiedEmail ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                  {copiedEmail ? 'Email copied!' : CONTACT_EMAIL}
+                </button>
+              </div>
             </div>
+
+            {/* Right column spacer on desktop / mobile Lanyard */}
+            {isDesktop ? (
+              <div className="h-[580px]" aria-hidden="true" />
+            ) : (
+              <div className="relative flex justify-center items-start">
+                <div className="w-full h-[520px] relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 rounded-full bg-gradient-to-r from-transparent via-indigo-300/60 to-transparent z-10" />
+                  <Suspense fallback={null}>
+                    <Lanyard
+                      frontImage="/card-front.jpg"
+                      backImage={cardBackImage}
+                      imageFit="cover"
+                      cardColor="#ffffff"
+                      orientation="portrait"
+                      finish="glossy"
+                      cornerRadius={0.3}
+                      size={0.56}
+                      anchor="center"
+                      strapLength={0.55}
+                      strapColor="#111111"
+                      strapWidth={0.65}
+                      metal="silver"
+                      gravity={1}
+                      damping={0.5}
+                      elasticity={0.5}
+                      breeze={0.3}
+                      interactive
+                      intro
+                    />
+                  </Suspense>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* ── STATS BAR ── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-indigo-300/15 rounded-2xl overflow-hidden border border-indigo-300/20 shadow-[0_20px_50px_rgba(15,23,42,0.45)] backdrop-blur-xl">
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/15 rounded-2xl overflow-hidden border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
           {[
             { value: 15, suffix: '+', label: 'Projects Built' },
             { value: 6, suffix: '+', label: 'Tech Domains' },
@@ -450,7 +427,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-indigo-950/55 py-8 px-4 hover:bg-indigo-900/55 transition-colors duration-300"
+              className="bg-zinc-950/85 py-7 px-4 hover:bg-zinc-900/90 transition-colors duration-300"
             >
               <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
             </div>
@@ -467,7 +444,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           <div className="animate-ticker">
             {[...TECH_STACK, ...TECH_STACK].map((tech, idx) => (
               <div key={`${tech}-${idx}`} className="pr-5 flex-shrink-0">
-                <span className="inline-block px-5 py-2 bg-indigo-950/55 border border-indigo-300/20 rounded-full text-indigo-100 text-sm font-medium hover:border-cyan-300/60 hover:text-white transition-colors duration-200 cursor-default backdrop-blur-md">
+                <span className="inline-block px-5 py-2 bg-zinc-950/85 border border-white/15 rounded-full text-white text-sm font-medium hover:border-amber-300/60 hover:text-amber-200 transition-colors duration-200 cursor-default">
                   {tech}
                 </span>
               </div>
@@ -479,14 +456,14 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       {/* ── DOMAIN CARDS ── */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-indigo-100 text-xs font-semibold uppercase tracking-widest mb-4 backdrop-blur-md">
-            <CircuitBoard size={13} className="text-cyan-300" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-950/85 border border-white/20 rounded-full text-amber-200 text-xs font-semibold uppercase tracking-widest mb-4">
+            <CircuitBoard size={13} className="text-amber-300" />
             Areas of Expertise
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+          <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
             What I Build
           </h2>
-          <p className="text-zinc-100/90 mt-3 max-w-xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-white/90 mt-3 max-w-xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
             Cross-disciplinary engineering from the silicon layer to the cloud — click any domain to explore related projects.
           </p>
         </div>
@@ -498,7 +475,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               icon={d.icon}
               title={d.title}
               desc={d.desc}
-              glowColor={d.glowColor}
+              hoverShadow={d.hoverShadow}
               borderColor={d.borderColor}
               iconBg={d.iconBg}
               delay={d.delay}
@@ -512,18 +489,18 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-widest mb-3 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-950/85 border border-white/20 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-widest mb-3">
               <Layers size={13} />
               Spotlight
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+            <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
               Featured Work &amp; Current Focus
             </h2>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('Projects')}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-950/60 hover:bg-indigo-900/70 border border-indigo-300/25 text-sm font-semibold text-cyan-200 hover:text-white transition-all self-start md:self-auto backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-sm font-semibold text-amber-200 hover:text-white transition-all self-start md:self-auto"
           >
             View all projects
             <ArrowRight size={16} />
@@ -544,7 +521,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   onNavigate('Projects', { category: item.category });
                 }
               }}
-              className={`group rounded-2xl border bg-indigo-950/55 hover:bg-indigo-950/75 p-6 backdrop-blur-xl shadow-[0_12px_36px_rgba(15,23,42,0.4)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
+              className={`group rounded-2xl border bg-zinc-950/80 hover:bg-zinc-950/95 p-6 shadow-[0_12px_36px_rgba(0,0,0,0.45)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
@@ -553,19 +530,19 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   </span>
                   <ArrowUpRight
                     size={16}
-                    className="text-indigo-200/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                    className="text-zinc-300 group-hover:text-amber-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
                   />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-200 transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-zinc-200/85 leading-relaxed mb-5">{item.summary}</p>
+                <p className="text-sm text-zinc-100/90 leading-relaxed mb-5">{item.summary}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {item.stack.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2.5 py-1 rounded-md bg-indigo-950/80 border border-indigo-300/20 text-[11px] font-mono text-indigo-100"
+                    className="px-2.5 py-1 rounded-md bg-zinc-900/90 border border-white/15 text-[11px] font-mono text-zinc-100"
                   >
                     {tech}
                   </span>
@@ -575,48 +552,72 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           ))}
         </div>
 
-        {/* Current Experience Snapshot */}
+        {/* Current Experience Snapshot (clickable to Resume) */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-indigo-300/20 bg-indigo-950/55 backdrop-blur-xl p-6 flex items-start gap-4 hover:border-cyan-300/50 transition-colors shadow-[0_12px_36px_rgba(15,23,42,0.4)]">
-            <div className="p-3 rounded-xl bg-blue-500/15 border border-blue-400/30 text-cyan-300 shrink-0">
+          <button
+            type="button"
+            onClick={() => onNavigate('Resume')}
+            className="group text-left rounded-2xl border border-white/15 bg-zinc-950/80 hover:bg-zinc-950/95 p-6 flex items-start gap-4 hover:border-cyan-300/60 transition-all shadow-[0_12px_36px_rgba(0,0,0,0.45)]"
+          >
+            <div className="p-3 rounded-xl bg-cyan-500/15 border border-cyan-300/30 text-cyan-200 shrink-0">
               <Briefcase size={20} />
             </div>
-            <div>
-              <div className="text-xs font-mono text-cyan-200 mb-1">Jan 2024 – Present</div>
-              <h3 className="text-base font-bold text-white">Founder &amp; Lead Developer — godem.in</h3>
-              <p className="text-sm text-zinc-200/85 mt-1.5 leading-relaxed">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-xs font-mono text-cyan-200">Jan 2024 – Present</span>
+                <ArrowUpRight
+                  size={15}
+                  className="text-zinc-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-cyan-200 transition-colors">
+                Founder &amp; Lead Developer — godem.in
+              </h3>
+              <p className="text-sm text-zinc-100/90 mt-1.5 leading-relaxed">
                 Building an open-source, AI-integrated IDE and IoT platform designed for hobbyists and makers, spanning system architecture to silicon-to-cloud tooling.
               </p>
             </div>
-          </div>
+          </button>
 
-          <div className="rounded-2xl border border-indigo-300/20 bg-indigo-950/55 backdrop-blur-xl p-6 flex items-start gap-4 hover:border-purple-400/50 transition-colors shadow-[0_12px_36px_rgba(15,23,42,0.4)]">
-            <div className="p-3 rounded-xl bg-purple-500/15 border border-purple-400/30 text-purple-300 shrink-0">
+          <button
+            type="button"
+            onClick={() => onNavigate('Resume')}
+            className="group text-left rounded-2xl border border-white/15 bg-zinc-950/80 hover:bg-zinc-950/95 p-6 flex items-start gap-4 hover:border-amber-300/60 transition-all shadow-[0_12px_36px_rgba(0,0,0,0.45)]"
+          >
+            <div className="p-3 rounded-xl bg-amber-400/15 border border-amber-300/30 text-amber-200 shrink-0">
               <Wifi size={20} />
             </div>
-            <div>
-              <div className="text-xs font-mono text-purple-200 mb-1">Mar 2025 – Jul 2026</div>
-              <h3 className="text-base font-bold text-white">Technical Engineer — Enthu Technology Solutions</h3>
-              <p className="text-sm text-zinc-200/85 mt-1.5 leading-relaxed">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-xs font-mono text-amber-200">Mar 2025 – Jul 2026</span>
+                <ArrowUpRight
+                  size={15}
+                  className="text-zinc-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-amber-200 transition-colors">
+                Technical Engineer — Enthu Technology Solutions
+              </h3>
+              <p className="text-sm text-zinc-100/90 mt-1.5 leading-relaxed">
                 Deploying industrial LoRaWAN gateways and end-nodes with ChirpStack network servers, optimizing packet reliability and real-time sensor dashboards.
               </p>
             </div>
-          </div>
+          </button>
         </div>
       </section>
 
       {/* ── BOTTOM CTA ── */}
       <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="relative rounded-3xl border border-indigo-300/25 bg-indigo-950/60 backdrop-blur-xl p-10 md:p-12 text-center overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.55)]">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/15 via-transparent to-pink-500/15 pointer-events-none" />
-          <Server size={40} className="text-cyan-300 mx-auto mb-5" />
+        <div className="relative rounded-3xl border border-white/20 bg-zinc-950/85 p-10 md:p-12 text-center overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.55)]">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-cyan-500/10 pointer-events-none" />
+          <Server size={40} className="text-amber-200 mx-auto mb-5" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Let&apos;s Build Something{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-sky-200 to-pink-200">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-white to-cyan-200">
               Extraordinary
             </span>
           </h2>
-          <p className="text-zinc-200/90 text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-zinc-100/90 text-lg mb-8 max-w-xl mx-auto">
             Whether it&apos;s a smart IoT product, a robotics system, or a full-stack web application — I&apos;m ready
             to engineer it with you.
           </p>
@@ -624,7 +625,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('Projects')}
-              className="group flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 border border-indigo-400/35 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(99,102,241,0.4)] hover:shadow-[0_0_32px_rgba(129,140,248,0.6)] hover:scale-[1.02]"
+              className="group flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-amber-100 text-zinc-950 font-extrabold rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.3)] hover:shadow-[0_0_32px_rgba(253,224,71,0.5)] hover:scale-[1.02]"
             >
               Explore My Work
               <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -632,7 +633,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('Skills')}
-              className="px-7 py-3.5 bg-indigo-950/60 hover:bg-indigo-900/70 border border-indigo-300/25 hover:border-indigo-300/50 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] backdrop-blur-md"
+              className="px-7 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 border border-white/25 hover:border-cyan-300/60 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02]"
             >
               View Skills
             </button>

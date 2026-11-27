@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 
-const CARD_WIDTH = 1024;
-const CARD_HEIGHT = 1440;
+const CARD_WIDTH = 768;
+const CARD_HEIGHT = 1080;
 const QUOTE_LINES = ['A men with', 'dreams to be', 'a millionaire'];
+
+let cachedTitanOneDataUrl: string | null = null;
 
 function renderCardBackDataUrl(): string {
   const canvas = document.createElement('canvas');
@@ -11,21 +13,19 @@ function renderCardBackDataUrl(): string {
   const ctx = canvas.getContext('2d');
   if (!ctx) return '';
 
-  // Pure black background
   ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
-  // Clean white 3-line quote in Titan One Regular
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#ffffff';
 
-  const maxLineWidth = CARD_WIDTH - 140;
-  let fontSize = 98;
+  const maxLineWidth = CARD_WIDTH - 110;
+  let fontSize = 74;
   ctx.font = `normal 400 ${fontSize}px "Titan One", sans-serif`;
 
   while (
-    fontSize > 48 &&
+    fontSize > 36 &&
     QUOTE_LINES.some((line) => ctx.measureText(line).width > maxLineWidth)
   ) {
     fontSize -= 2;
@@ -42,41 +42,34 @@ function renderCardBackDataUrl(): string {
   return canvas.toDataURL('image/png');
 }
 
-export function useCardBackImage(): string {
-  const [dataUrl, setDataUrl] = useState<string>(() => renderCardBackDataUrl());
+export function useCardBackImage(): string | undefined {
+  const [dataUrl, setDataUrl] = useState<string | undefined>(() => cachedTitanOneDataUrl ?? undefined);
 
   useEffect(() => {
+    if (cachedTitanOneDataUrl) return;
     let cancelled = false;
 
     const loadTitanOne = async () => {
       try {
         if (document.fonts) {
           await document.fonts.load(
-            'normal 400 98px "Titan One"',
+            'normal 400 74px "Titan One"',
             QUOTE_LINES.join(' ')
           );
-          await document.fonts.ready;
         }
       } catch {
-        // Fallback already rendered
+        // Fallback render
       }
       if (!cancelled) {
-        setDataUrl(renderCardBackDataUrl());
+        const rendered = renderCardBackDataUrl();
+        cachedTitanOneDataUrl = rendered;
+        setDataUrl(rendered);
       }
     };
 
     void loadTitanOne();
-
-    const handleLoadingDone = () => {
-      if (!cancelled) {
-        setDataUrl(renderCardBackDataUrl());
-      }
-    };
-    document.fonts?.addEventListener('loadingdone', handleLoadingDone);
-
     return () => {
       cancelled = true;
-      document.fonts?.removeEventListener('loadingdone', handleLoadingDone);
     };
   }, []);
 
