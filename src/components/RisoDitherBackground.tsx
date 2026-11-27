@@ -177,7 +177,7 @@ export const RisoDitherBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="fixed inset-0 w-full h-full -z-10 pointer-events-none no-print"
+      className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-75 no-print"
       style={{ imageRendering: 'pixelated' }}
     />
   );

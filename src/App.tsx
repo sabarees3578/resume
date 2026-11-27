@@ -77,7 +77,7 @@ function App() {
   };
 
   return (
-    <div className="relative isolate min-h-screen bg-zinc-950 text-white flex flex-col">
+    <div className="relative isolate min-h-screen bg-zinc-950 text-white print:bg-white print:text-black flex flex-col">
       <RisoDitherBackground />
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
       <main key={currentPage} className="flex-1 animate-fade-up">

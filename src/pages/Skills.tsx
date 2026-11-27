@@ -93,34 +93,31 @@ export const Skills: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-transparent text-white relative overflow-hidden pb-24">
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-        />
-      </div>
+      {/* Subtle Dot Overlay */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/60 border border-indigo-300/25 rounded-full text-cyan-200 text-sm font-semibold mb-5 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-950/80 border border-white/20 rounded-full text-cyan-200 text-sm font-semibold mb-5">
               <Cpu size={16} />
               Technical Arsenal • {totalSkillsCount} Skills
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.65)]">
               My{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-pink-200">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-amber-200">
                 Skills
               </span>
             </h1>
-            <p className="text-zinc-200/90 text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
+            <p className="text-white/90 text-base sm:text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               Click any skill pill below to inspect how it fits into hardware-software engineering, or filter the stack.
             </p>
           </div>
@@ -128,30 +125,30 @@ export const Skills: React.FC = () => {
           <button
             type="button"
             onClick={() => openSkillExplainer('')}
-            className="group flex items-center gap-2 px-5 py-2.5 bg-indigo-950/65 hover:bg-indigo-900/75 border border-indigo-300/25 hover:border-cyan-300/50 text-zinc-100 hover:text-cyan-200 rounded-xl transition-all duration-300 backdrop-blur-xl shadow-lg"
+            className="group flex items-center gap-2 px-5 py-2.5 bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-cyan-300/50 text-white hover:text-cyan-200 rounded-xl transition-all duration-300 shadow-lg"
           >
-            <Sparkles size={18} className="text-yellow-400 group-hover:animate-pulse" />
+            <Sparkles size={18} className="text-amber-300 group-hover:animate-pulse" />
             <span className="font-semibold text-sm">AI Skill Explainer</span>
           </button>
         </div>
 
         {/* Search Input */}
         <div className="mb-10 max-w-md relative">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-200/70" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Filter skills (e.g. ESP32, React, MQTT)..."
             aria-label="Filter skills"
-            className="w-full pl-10 pr-9 py-2.5 bg-indigo-950/60 border border-indigo-300/25 focus:border-cyan-300/60 rounded-xl text-sm text-white placeholder:text-indigo-200/50 focus:outline-none transition-colors backdrop-blur-md"
+            className="w-full pl-10 pr-9 py-2.5 bg-zinc-950/85 border border-white/20 focus:border-cyan-300/60 rounded-xl text-sm text-white placeholder:text-zinc-400 focus:outline-none transition-colors"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
               aria-label="Clear filter"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-200/70 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
             >
               <X size={15} />
             </button>
@@ -164,7 +161,7 @@ export const Skills: React.FC = () => {
             {filteredCategories.map((category, index) => (
               <div
                 key={category.title}
-                className="group relative bg-indigo-950/75 hover:bg-indigo-950/90 border border-indigo-300/20 hover:border-indigo-300/45 rounded-3xl p-6 shadow-[0_16px_40px_rgba(15,23,42,0.4)] transition-all duration-300 hover:-translate-y-1 overflow-hidden animate-fade-up"
+                className="group relative bg-zinc-950/80 hover:bg-zinc-950/95 border border-white/15 hover:border-indigo-300/45 rounded-3xl p-5 sm:p-6 shadow-[0_16px_40px_rgba(0,0,0,0.45)] transition-all duration-300 hover:-translate-y-1 overflow-hidden animate-fade-up"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${category.glow}`} />
@@ -173,13 +170,13 @@ export const Skills: React.FC = () => {
                   <div className="flex items-center justify-between gap-3 mb-6">
                     <div className="flex items-center gap-3.5">
                       <div
-                        className={`p-3 rounded-xl bg-indigo-950/80 border border-indigo-300/20 ${category.iconColorClass} group-hover:scale-110 transition-transform duration-500 shadow-inner`}
+                        className={`p-3 rounded-xl bg-zinc-900/90 border border-white/15 ${category.iconColorClass} group-hover:scale-110 transition-transform duration-500 shadow-inner`}
                       >
                         {category.icon}
                       </div>
                       <h3 className="text-xl font-bold text-white">{category.title}</h3>
                     </div>
-                    <span className="text-xs font-mono text-indigo-200/70">{category.skills.length}</span>
+                    <span className="text-xs font-mono text-zinc-400">{category.skills.length}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -189,7 +186,7 @@ export const Skills: React.FC = () => {
                         type="button"
                         onClick={() => openSkillExplainer(skill)}
                         title={`Explain ${skill} with AI`}
-                        className="px-3 py-1.5 bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-300/20 hover:border-cyan-300/50 rounded-lg text-sm font-medium text-indigo-100 hover:text-white transition-all cursor-pointer"
+                        className="px-3 py-1.5 bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 hover:border-cyan-300/50 rounded-lg text-sm font-medium text-zinc-100 hover:text-white transition-all cursor-pointer"
                       >
                         {skill}
                       </button>
@@ -200,9 +197,9 @@ export const Skills: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-indigo-300/20 bg-indigo-950/55 backdrop-blur-xl p-10 text-center max-w-lg mx-auto">
+          <div className="rounded-3xl border border-white/15 bg-zinc-950/85 p-10 text-center max-w-lg mx-auto">
             <h3 className="text-lg font-bold text-white mb-2">No skills match &ldquo;{searchQuery}&rdquo;</h3>
-            <p className="text-sm text-zinc-200/85 mb-5">Try another keyword or clear the search filter.</p>
+            <p className="text-sm text-zinc-300 mb-5">Try another keyword or clear the search filter.</p>
             <button
               type="button"
               onClick={() => setSearchQuery('')}
@@ -214,13 +211,13 @@ export const Skills: React.FC = () => {
         )}
 
         {/* Continuous Learning Banner */}
-        <div className="mt-14 relative overflow-hidden rounded-3xl bg-indigo-950/60 border border-indigo-300/25 p-8 md:p-12 text-center group hover:border-indigo-300/45 transition-colors duration-500 backdrop-blur-xl shadow-[0_24px_60px_rgba(15,23,42,0.5)]">
+        <div className="mt-14 relative overflow-hidden rounded-3xl bg-zinc-950/85 border border-white/15 p-8 md:p-12 text-center group hover:border-indigo-300/45 transition-colors duration-500 shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
           <div className="relative z-10 max-w-2xl mx-auto">
-            <div className="w-16 h-16 mx-auto bg-indigo-900/60 border border-indigo-300/25 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+            <div className="w-16 h-16 mx-auto bg-zinc-900/90 border border-white/15 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
               <Sparkles size={28} className="text-cyan-300" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Continuous Learning</h3>
-            <p className="text-zinc-200/90 text-lg leading-relaxed">
+            <p className="text-zinc-200/90 text-base sm:text-lg leading-relaxed">
               The tech landscape is always evolving. I am constantly exploring new paradigms, improving my embedded C++ routines, and adopting modern web frameworks to build faster, more resilient systems.
             </p>
           </div>

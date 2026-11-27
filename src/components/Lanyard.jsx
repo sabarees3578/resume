@@ -429,6 +429,29 @@ const paintFace = (canvas, image, color, fit) => {
   ctx.fillStyle = toCss(color);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (image) drawFitted(ctx, image, canvas.width, canvas.height, fit);
+
+  // Subtle frosted glass rim around the ID card face
+  const inset = Math.round(canvas.width * 0.022);
+  const corner = Math.round(canvas.width * 0.055);
+  ctx.save();
+  ctx.beginPath();
+  traceRoundedRect(ctx, inset, inset, canvas.width - inset * 2, canvas.height - inset * 2, corner);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
+  ctx.stroke();
+  ctx.beginPath();
+  traceRoundedRect(
+    ctx,
+    inset + 3,
+    inset + 3,
+    canvas.width - (inset + 3) * 2,
+    canvas.height - (inset + 3) * 2,
+    Math.max(4, corner - 3)
+  );
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(165, 180, 252, 0.28)';
+  ctx.stroke();
+  ctx.restore();
 };
 
 const paintStrap = (canvas, image, color) => {
@@ -927,8 +950,9 @@ const Lanyard = ({
       foilUniforms.foilKey.value.set(-2.5, 4, 6).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilFill.value.set(3, -1, 4).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilTop.value.set(0.5, 4.5, 8).normalize().transformDirection(camera.matrixWorldInverse);
-      const anchorX = ((ANCHORS[s.anchor] ?? 0.5) - 0.5) * viewWidth;
-      const anchorY = viewHeight / 2 + 0.2;
+      const anchorRatio = s.anchor === 'right' ? (view.width < 1180 ? 0.75 : 0.72) : (ANCHORS[s.anchor] ?? 0.5);
+      const anchorX = (anchorRatio - 0.5) * viewWidth;
+      const anchorY = viewHeight / 2 + 0.35;
       const cardTop = viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength, 0, 1));
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
       sim.anchor.set(anchorX, anchorY, 0);

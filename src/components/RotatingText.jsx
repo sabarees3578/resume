@@ -125,21 +125,31 @@ const RotatingText = forwardRef((props, ref) => {
     ...rest
   } = props;
 
+  const safeTexts = useMemo(
+    () => (Array.isArray(texts) && texts.length > 0 ? texts : ['']),
+    [texts]
+  );
+
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const indexRef = useRef(0);
   const onNextRef = useRef(onNext);
   onNextRef.current = onNext;
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const contentRef = useRef(null);
   const width = useMotionValue('auto');
   const reduceMotion = useReducedMotion();
 
-  const lastIndex = Math.max(texts.length - 1, 0);
+  const lastIndex = Math.max(safeTexts.length - 1, 0);
   const activeIndex = Math.min(currentTextIndex, lastIndex);
 
   const elements = useMemo(() => {
-    const currentText = texts[activeIndex] ?? '';
+    const currentText = safeTexts[activeIndex] ?? '';
     if (splitBy === 'characters') {
       const words = currentText.split(' ');
       return words.map((word, i) => ({
@@ -164,7 +174,7 @@ const RotatingText = forwardRef((props, ref) => {
       characters: [part],
       needsSpace: i !== arr.length - 1
     }));
-  }, [texts, activeIndex, splitBy]);
+  }, [safeTexts, activeIndex, splitBy]);
 
   const order = useMemo(() => {
     const total = elements.reduce((sum, word) => sum + word.characters.length, 0);
@@ -291,7 +301,7 @@ const RotatingText = forwardRef((props, ref) => {
                 return (
                   <motion.span
                     key={charIndex}
-                    initial={enterFrom}
+                    initial={hasMounted ? enterFrom : false}
                     animate={enterTo}
                     exit={exitTransition ? { ...leaveTo, transition: { ...exitTransition, delay } } : leaveTo}
                     transition={{ ...charTransition, delay }}
@@ -321,7 +331,7 @@ const RotatingText = forwardRef((props, ref) => {
         layout={!highlight}
         transition={transition ?? LAYOUT_SPRING}
       >
-        <span className="text-rotate-sr-only">{texts[activeIndex]}</span>
+        <span className="text-rotate-sr-only">{safeTexts[activeIndex]}</span>
         {highlight ? (
           <span ref={contentRef} className="text-rotate-highlight-content">
             {presence}

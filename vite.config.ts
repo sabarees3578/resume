@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['lucide-react', 'three', 'gsap', 'motion/react'],
+    include: ['lucide-react', 'three', 'motion/react'],
   },
   build: {
     rollupOptions: {
@@ -19,7 +19,6 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           three: ['three'],
-          gsap: ['gsap', '@gsap/react'],
           motion: ['motion'],
           icons: ['lucide-react'],
         },

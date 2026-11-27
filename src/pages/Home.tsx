@@ -15,6 +15,7 @@ interface HomeProps {
 }
 
 const ROLES = [
+  'Mechatronics & Full-Stack IoT Engineer',
   'IoT & Embedded Engineer',
   'Full-Stack Developer',
   'Robotics & Automation Specialist',
@@ -144,9 +145,24 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   };
 
   const quickLinks = [
-    { icon: <Github size={18} />, href: 'https://github.com/sabarees3578', label: 'GitHub' },
-    { icon: <Linkedin size={18} />, href: 'https://www.linkedin.com/in/sabarees-rajendran', label: 'LinkedIn' },
-    { icon: <Mail size={18} />, href: `mailto:${CONTACT_EMAIL}`, label: 'Email' },
+    {
+      icon: <Github size={19} />,
+      href: 'https://github.com/sabarees3578',
+      label: 'GitHub',
+      hover: 'hover:bg-zinc-800 hover:border-white/50 hover:text-white',
+    },
+    {
+      icon: <Linkedin size={19} />,
+      href: 'https://www.linkedin.com/in/sabarees-rajendran',
+      label: 'LinkedIn',
+      hover: 'hover:bg-indigo-500/20 hover:border-indigo-300/60 hover:text-indigo-200',
+    },
+    {
+      icon: <Mail size={19} />,
+      href: `mailto:${CONTACT_EMAIL}`,
+      label: 'Email',
+      hover: 'hover:bg-cyan-500/20 hover:border-cyan-300/60 hover:text-cyan-200',
+    },
   ];
 
   const domains: Array<{
@@ -238,6 +254,12 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
     <div className="relative min-h-screen bg-transparent overflow-x-hidden">
       {/* ── HERO SECTION ── */}
       <section className="relative z-10 w-full pb-12 md:pb-16">
+        {/* Subtle dark vignette behind left hero column for strong text & CTA contrast */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 w-full lg:w-[70%] bg-[radial-gradient(ellipse_at_22%_45%,rgba(9,9,11,0.78)_0%,rgba(9,9,11,0.48)_50%,transparent_82%)] z-0"
+        />
+
         {/* Full-site-width 3D Lanyard viewport on desktop (zero side clipping when dragging) */}
         {isDesktop && (
           <div className="absolute inset-0 z-20 pointer-events-none">
@@ -252,7 +274,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 cornerRadius={0.3}
                 size={0.56}
                 anchor="right"
-                strapLength={0.52}
+                strapLength={0.5}
                 strapColor="#111111"
                 strapWidth={0.65}
                 metal="silver"
@@ -268,10 +290,10 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         )}
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-start">
             {/* Left: Text content */}
             <div className="space-y-6 pt-28 md:pt-36">
-              <h1 className="animate-fade-up text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.75)]">
+              <h1 className="animate-fade-up text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
                 <span className="inline-flex flex-wrap sm:flex-nowrap items-baseline gap-x-3 sm:whitespace-nowrap">
                   <span className="text-white">Sabarees</span>
                   <span
@@ -287,27 +309,28 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               </h1>
 
               {/* Smooth rotating role pill */}
-              <div className="animate-fade-up-delay-1 flex items-center min-h-[42px] overflow-hidden">
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-zinc-950/85 border border-white/20 shadow-[0_8px_28px_rgba(0,0,0,0.5)]">
+              <div className="animate-fade-up-delay-1 flex items-center">
+                <div className="inline-flex items-center gap-2.5 px-4 py-1.5 min-h-[38px] max-w-full rounded-full bg-indigo-500/10 border border-indigo-400/25 backdrop-blur-md shadow-[0_8px_24px_rgba(2,6,23,0.45)]">
                   <span className="relative flex h-2 w-2 shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-300" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-300 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-200" />
                   </span>
                   <RotatingText
                     texts={ROLES}
                     effect="blur"
                     splitBy="words"
                     staggerDuration={0}
-                    rotationInterval={2600}
-                    transition={{ duration: 0.18 }}
-                    exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                    rotationInterval={2800}
+                    transition={{ duration: 0.2 }}
+                    exit={{ opacity: 0, transition: { duration: 0.12 } }}
                     pauseOnHover
-                    mainClassName="text-sm sm:text-base font-bold text-amber-200 whitespace-nowrap"
+                    mainClassName="text-sm sm:text-base font-semibold text-indigo-200 tracking-tight"
+                    elementLevelClassName="text-white/95"
                   />
                 </div>
               </div>
 
-              <p className="animate-fade-up-delay-2 text-white/95 text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              <p className="animate-fade-up-delay-2 text-white/95 text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]">
                 Engineering{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-cyan-200 font-bold">
                   intelligent hardware-software ecosystems
@@ -323,7 +346,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                     key={chip.label}
                     type="button"
                     onClick={() => onNavigate('Projects', { category: chip.category })}
-                    className="px-3.5 py-1.5 rounded-full bg-zinc-950/80 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-xs font-mono text-white hover:text-amber-200 transition-all"
+                    className="px-3.5 py-1.5 rounded-full bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-xs font-mono text-white hover:text-amber-200 transition-all"
                   >
                     {chip.label}
                   </button>
@@ -343,7 +366,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('Resume')}
-                  className="flex items-center gap-2 px-6 py-3.5 bg-zinc-950/85 hover:bg-zinc-900 border border-white/25 hover:border-cyan-300/60 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                  className="flex items-center gap-2 px-6 py-3.5 bg-zinc-950/90 hover:bg-zinc-900 border border-white/25 hover:border-cyan-300/60 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95"
                 >
                   <FileText size={17} className="text-cyan-200" />
                   View &amp; Download Resume
@@ -351,9 +374,9 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               </div>
 
               {/* Social quick links + copy email */}
-              <div className="animate-fade-up-delay-5 flex flex-wrap items-center gap-2.5 pt-3 border-t border-white/20 max-w-xl">
-                <span className="text-white/90 text-xs font-mono uppercase tracking-wider mr-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
-                  Connect
+              <div className="animate-fade-up-delay-5 flex flex-wrap items-center gap-3 pt-4 border-t border-white/20 max-w-xl">
+                <span className="text-white/90 text-xs font-semibold uppercase tracking-widest mr-0.5 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)]">
+                  Connect:
                 </span>
                 {quickLinks.map((link) => (
                   <a
@@ -363,7 +386,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                     rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     aria-label={link.label}
                     title={link.label}
-                    className="inline-flex p-2.5 rounded-xl bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-amber-300/60 text-white hover:text-amber-200 transition-all duration-200 hover:scale-105"
+                    className={`w-10 h-10 inline-flex items-center justify-center rounded-xl bg-zinc-950/90 border border-white/20 text-zinc-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(0,0,0,0.45)] ${link.hover}`}
                   >
                     {link.icon}
                   </a>
@@ -371,21 +394,30 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-zinc-950/85 hover:bg-zinc-900 border border-white/20 hover:border-cyan-300/60 text-xs font-mono text-white hover:text-cyan-200 transition-all"
+                  aria-live="polite"
+                  className={`inline-flex items-center gap-2 min-h-[40px] px-4 py-2 rounded-xl border font-sans text-sm font-medium transition-all duration-200 ${
+                    copiedEmail
+                      ? 'bg-emerald-500/20 border-emerald-400/60 text-emerald-200 shadow-[0_0_18px_rgba(52,211,153,0.28)]'
+                      : 'bg-zinc-950/90 hover:bg-zinc-900 border-white/20 hover:border-indigo-300/60 text-white hover:text-indigo-200'
+                  }`}
                 >
-                  {copiedEmail ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                  {copiedEmail ? 'Email copied!' : CONTACT_EMAIL}
+                  {copiedEmail ? (
+                    <Check size={15} className="text-emerald-300 shrink-0" />
+                  ) : (
+                    <Copy size={15} className="text-indigo-200 shrink-0" />
+                  )}
+                  <span>{copiedEmail ? 'Copied!' : CONTACT_EMAIL}</span>
                 </button>
               </div>
             </div>
 
             {/* Right column spacer on desktop / mobile Lanyard */}
             {isDesktop ? (
-              <div className="h-[580px]" aria-hidden="true" />
+              <div className="h-[560px] xl:h-[600px]" aria-hidden="true" />
             ) : (
-              <div className="relative flex justify-center items-start">
-                <div className="w-full h-[520px] relative">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 rounded-full bg-gradient-to-r from-transparent via-indigo-300/60 to-transparent z-10" />
+              <div className="relative flex justify-center items-start pt-2">
+                <div className="w-full max-w-md h-[430px] sm:h-[490px] relative rounded-3xl border border-indigo-400/20 bg-zinc-950/35 overflow-hidden shadow-[0_20px_50px_rgba(2,6,23,0.55)]">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-1 rounded-full bg-gradient-to-r from-transparent via-indigo-300/60 to-transparent z-10" />
                   <Suspense fallback={null}>
                     <Lanyard
                       frontImage="/card-front.jpg"
@@ -397,7 +429,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                       cornerRadius={0.3}
                       size={0.56}
                       anchor="center"
-                      strapLength={0.55}
+                      strapLength={0.42}
                       strapColor="#111111"
                       strapWidth={0.65}
                       metal="silver"
