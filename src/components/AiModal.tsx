@@ -98,30 +98,30 @@ export const AiModal: React.FC<AiModalProps> = ({
       aria-labelledby="ai-modal-title"
     >
       <div
-        className="relative bg-zinc-900/95 border border-zinc-700/80 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] max-w-2xl w-full max-h-[88vh] overflow-hidden flex flex-col"
+        className="relative bg-indigo-950/95 border border-white/20 rounded-3xl shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_25px_70px_rgba(0,0,0,0.75)] max-w-2xl w-full max-h-[88vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Ambient top glow */}
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/70 to-transparent" />
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent" />
 
         {/* Header */}
-        <div className="px-6 py-4 border-b border-zinc-800/80 flex justify-between items-center bg-zinc-950/60">
+        <div className="px-6 py-4 border-b border-white/15 flex justify-between items-center bg-indigo-950/60">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400">
+            <div className="p-2 rounded-xl bg-cyan-500/15 border border-cyan-300/30 text-cyan-200">
               <Sparkles size={18} />
             </div>
             <div>
               <h2 id="ai-modal-title" className="text-lg font-bold text-white leading-tight">
                 {title}
               </h2>
-              <p className="text-xs text-zinc-500">Powered by Gemini AI with smart offline fallback</p>
+              <p className="text-xs text-indigo-200/75">Powered by Gemini AI with smart offline fallback</p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleClose}
             aria-label="Close modal"
-            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-2 rounded-xl text-indigo-200/80 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X size={20} />
           </button>

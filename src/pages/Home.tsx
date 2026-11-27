@@ -5,7 +5,7 @@ import type { ProjectCategory } from './Projects';
 import {
   Code, Bot, Github, Linkedin, Mail,
   ArrowRight, CircuitBoard, Wifi, Briefcase,
-  Copy, Check, Layers, ArrowUpRight, FileText, Server
+  Copy, Check, Layers, ArrowUpRight, FileText, Server, ChevronDown
 } from 'lucide-react';
 
 const Lanyard = lazy(() => import('../components/Lanyard'));
@@ -17,7 +17,6 @@ interface HomeProps {
 const ROLES = [
   'Hardware-to-Cloud Systems Engineer',
   'Founder @ Godem (godem.in)',
-  'Creator of iotmaker.cloud',
   'Mechatronics & Robotics Builder',
   'Rust, Tauri & Embedded Engineer',
   'IEEE-Published IoT Researcher',
@@ -51,7 +50,7 @@ const FOCUS_CHIPS: Array<{ label: string; category: ProjectCategory }> = [
   { label: 'THT CNC & KiCad PCB', category: 'Robotics' },
 ];
 
-const CONTACT_EMAIL = 'sabareesgodkiller@gmail.com';
+const CONTACT_EMAIL = 'sabareesgodem@gmail.com';
 
 // Interactive CSS-driven domain card
 const DomainCard: React.FC<{
@@ -67,14 +66,16 @@ const DomainCard: React.FC<{
   <button
     type="button"
     onClick={onClick}
-    className={`relative group text-left rounded-2xl border p-6 transition-all duration-300 cursor-pointer bg-indigo-950/35 hover:bg-indigo-950/50 hover:-translate-y-2 hover:scale-[1.015] shadow-[0_12px_32px_rgba(15,23,42,0.28)] animate-fade-up ${borderColor} ${hoverShadow}`}
+    className={`relative group flex flex-col justify-between h-full text-left rounded-2xl border p-6 transition-all duration-300 cursor-pointer bg-indigo-950/55 hover:bg-indigo-950/75 hover:-translate-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_16px_38px_rgba(15,23,42,0.38)] animate-fade-up ${borderColor} ${hoverShadow}`}
     style={{ animationDelay: delay }}
   >
-    <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/25`}>{icon}</div>
-    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-200 transition-colors">{title}</h3>
-    <p className="text-white/90 text-sm leading-relaxed pr-2">{desc}</p>
+    <div>
+      <div className={`inline-flex p-3 rounded-xl mb-4 ${iconBg} ring-1 ring-white/25`}>{icon}</div>
+      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-200 transition-colors">{title}</h3>
+      <p className="text-white/90 text-sm leading-relaxed pr-1">{desc}</p>
+    </div>
 
-    <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-200 group-hover:text-white transition-colors">
+    <div className="mt-5 pt-3 border-t border-white/10 inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-200 group-hover:text-white transition-colors">
       <span>Explore projects</span>
       <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
     </div>
@@ -214,7 +215,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   return (
     <div className="relative min-h-screen bg-transparent overflow-x-hidden">
       {/* ── HERO SECTION ── */}
-      <section className="relative z-10 w-full min-h-[calc(100vh-2rem)] pb-14 md:pb-20">
+      <section className="relative z-10 w-full min-h-[calc(100vh-1rem)] flex flex-col justify-between pt-28 md:pt-32 pb-10">
         {/* Full-site-width 3D Lanyard viewport on desktop (zero side clipping when dragging) */}
         {isDesktop && (
           <div className="absolute inset-0 z-20 pointer-events-none">
@@ -244,17 +245,17 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           </div>
         )}
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-start">
             {/* Left: Text content */}
-            <div className="space-y-6 pt-28 md:pt-36">
-              <h1 className="animate-fade-up text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_20px_rgba(15,23,42,0.55)]">
+            <div className="space-y-6 pt-2 md:pt-6">
+              <h1 className="animate-fade-up text-[2.1rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.45rem] font-extrabold text-white leading-[1.06] tracking-tight drop-shadow-[0_4px_22px_rgba(15,23,42,0.75)]">
                 <span className="inline-flex flex-wrap sm:flex-nowrap items-baseline gap-x-3 sm:whitespace-nowrap">
                   <span className="text-white">Sabarees</span>
                   <span
                     className="text-transparent bg-clip-text animate-gradient-text"
                     style={{
-                      backgroundImage: 'linear-gradient(270deg, #fde047, #ffffff, #67e8f9, #fde047)',
+                      backgroundImage: 'linear-gradient(270deg, #ffffff, #a5f3fc, #fde68a, #ffffff)',
                       backgroundSize: '200% 200%',
                     }}
                   >
@@ -265,7 +266,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
               {/* Smooth rotating role pill */}
               <div className="animate-fade-up-delay-1 flex items-center">
-                <div className="inline-flex items-center gap-2.5 px-4 py-1.5 min-h-[38px] max-w-full rounded-full bg-white/15 border border-white/30 backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.25)]">
+                <div className="inline-flex items-center gap-2.5 px-4 py-1.5 min-h-[38px] max-w-full rounded-full bg-indigo-950/55 border border-white/25 backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.35)]">
                   <span className="relative flex h-2 w-2 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-200" />
@@ -285,13 +286,13 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <p className="animate-fade-up-delay-2 text-white text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_10px_rgba(15,23,42,0.65)]">
+              <p className="animate-fade-up-delay-2 text-white text-base sm:text-lg leading-relaxed max-w-xl drop-shadow-[0_2px_14px_rgba(15,23,42,0.85)]">
                 Independent{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-cyan-200 font-bold">
+                <span className="font-bold text-white underline decoration-cyan-300/75 decoration-2 underline-offset-4">
                   Hardware-to-Cloud Systems Engineer
                 </span>{' '}
                 &amp; Mechatronics builder (B.E. Mechatronics, IEEE-published IoT researcher). Founder of{' '}
-                <span className="font-semibold text-cyan-200">Godem (godem.in)</span> — engineering custom PCBs, THT CNC machinery, embedded firmware, Rust + Tauri IDEs, and self-hosted IoT infrastructure.
+                <span className="font-bold text-amber-200">Godem (godem.in)</span> — engineering custom PCBs, THT CNC machinery, embedded firmware, Rust + Tauri IDEs, and self-hosted IoT infrastructure.
               </p>
 
               {/* Clickable focus chips */}
@@ -301,7 +302,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                     key={chip.label}
                     type="button"
                     onClick={() => onNavigate('Projects', { category: chip.category })}
-                    className="px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 hover:border-amber-200/70 text-xs font-mono text-white hover:text-amber-100 transition-all"
+                    className="px-3.5 py-1.5 rounded-full bg-indigo-950/55 hover:bg-indigo-950/75 border border-white/25 hover:border-amber-200/70 text-xs font-mono text-white hover:text-amber-100 transition-all shadow-sm"
                   >
                     {chip.label}
                   </button>
@@ -313,7 +314,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('Projects')}
-                  className="group flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-amber-100 text-indigo-950 font-extrabold rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(15,23,42,0.28)] hover:shadow-[0_12px_34px_rgba(255,255,255,0.4)] hover:scale-[1.02] active:scale-95"
+                  className="group flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-amber-100 text-indigo-950 font-extrabold rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(15,23,42,0.35)] hover:shadow-[0_12px_34px_rgba(255,255,255,0.4)] hover:scale-[1.02] active:scale-95"
                 >
                   View Projects
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -321,7 +322,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('Resume')}
-                  className="flex items-center gap-2 px-6 py-3.5 bg-white/15 hover:bg-white/25 border border-white/30 hover:border-white/50 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                  className="flex items-center gap-2 px-6 py-3.5 bg-indigo-950/55 hover:bg-indigo-950/75 border border-white/30 hover:border-white/55 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-sm"
                 >
                   <FileText size={17} className="text-cyan-200" />
                   View &amp; Download Resume
@@ -330,7 +331,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
               {/* Social quick links + copy email */}
               <div className="animate-fade-up-delay-5 flex flex-wrap items-center gap-3 pt-4 border-t border-white/25 max-w-xl">
-                <span className="text-white/95 text-xs font-semibold uppercase tracking-widest mr-0.5 drop-shadow-[0_1px_6px_rgba(15,23,42,0.5)]">
+                <span className="text-white text-xs font-semibold uppercase tracking-widest mr-0.5 drop-shadow-[0_1px_8px_rgba(15,23,42,0.75)]">
                   Connect:
                 </span>
                 {quickLinks.map((link) => (
@@ -341,7 +342,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                     rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     aria-label={link.label}
                     title={link.label}
-                    className={`w-10 h-10 inline-flex items-center justify-center rounded-xl bg-white/15 border border-white/25 text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(15,23,42,0.3)] ${link.hover}`}
+                    className={`w-10 h-10 inline-flex items-center justify-center rounded-xl bg-indigo-950/55 border border-white/25 text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(15,23,42,0.35)] ${link.hover}`}
                   >
                     {link.icon}
                   </a>
@@ -352,8 +353,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   aria-live="polite"
                   className={`inline-flex items-center gap-2 min-h-[40px] px-4 py-2 rounded-xl border font-sans text-sm font-medium transition-all duration-200 ${
                     copiedEmail
-                      ? 'bg-emerald-500/25 border-emerald-300/70 text-emerald-100 shadow-[0_0_18px_rgba(52,211,153,0.3)]'
-                      : 'bg-white/15 hover:bg-white/25 border-white/25 hover:border-white/50 text-white'
+                      ? 'bg-emerald-500/30 border-emerald-300/70 text-emerald-100 shadow-[0_0_18px_rgba(52,211,153,0.3)]'
+                      : 'bg-indigo-950/55 hover:bg-indigo-950/75 border-white/25 hover:border-white/50 text-white'
                   }`}
                 >
                   {copiedEmail ? (
@@ -368,7 +369,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
             {/* Right column spacer on desktop / mobile Lanyard */}
             {isDesktop ? (
-              <div className="h-[560px] xl:h-[600px]" aria-hidden="true" />
+              <div className="h-[520px] xl:h-[560px]" aria-hidden="true" />
             ) : (
               <div className="relative flex justify-center items-start pt-2">
                 <div className="w-full max-w-md h-[430px] sm:h-[490px] relative rounded-3xl border border-white/25 bg-white/10 overflow-hidden shadow-[0_20px_50px_rgba(15,23,42,0.35)]">
@@ -401,30 +402,27 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             )}
           </div>
         </div>
-      </section>
 
-      {/* ── TECH STACK SEAMLESS TICKER ── */}
-      <section className="relative z-10 mb-20 overflow-hidden">
-        <div
-          className="overflow-hidden"
-          style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
-        >
-          <div className="animate-ticker">
-            {[...TECH_STACK, ...TECH_STACK].map((tech, idx) => (
-              <div key={`${tech}-${idx}`} className="pr-5 flex-shrink-0">
-                <span className="inline-block px-5 py-2 bg-white/15 border border-white/25 rounded-full text-white text-sm font-medium hover:bg-white/25 hover:border-amber-200/70 transition-colors duration-200 cursor-default">
-                  {tech}
-                </span>
-              </div>
-            ))}
-          </div>
+        {/* Subtle bottom scroll cue on desktop */}
+        <div className="hidden lg:flex justify-center pt-6 relative z-30">
+          <a
+            href="#what-i-build"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('what-i-build')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-950/45 hover:bg-indigo-950/70 border border-white/20 text-xs font-medium text-white/85 hover:text-white transition-all"
+          >
+            <span>Explore domains &amp; featured builds</span>
+            <ChevronDown size={14} className="animate-bounce" />
+          </a>
         </div>
       </section>
 
       {/* ── DOMAIN CARDS ── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+      <section id="what-i-build" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 mb-24">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 border border-white/25 rounded-full text-amber-200 text-xs font-semibold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/55 border border-white/25 rounded-full text-amber-200 text-xs font-semibold uppercase tracking-widest mb-4">
             <CircuitBoard size={13} className="text-amber-200" />
             Areas of Expertise
           </div>
@@ -457,7 +455,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 border border-white/25 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-widest mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/55 border border-white/25 rounded-full text-cyan-200 text-xs font-semibold uppercase tracking-widest mb-3">
               <Layers size={13} />
               Spotlight
             </div>
@@ -468,7 +466,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('Projects')}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 hover:border-amber-200/60 text-sm font-semibold text-white transition-all self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-950/55 hover:bg-indigo-950/75 border border-white/25 hover:border-amber-200/60 text-sm font-semibold text-white transition-all self-start md:self-auto"
           >
             View all projects
             <ArrowRight size={16} />
@@ -489,7 +487,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   onNavigate('Projects', { category: item.category });
                 }
               }}
-              className={`group rounded-2xl border bg-indigo-950/35 hover:bg-indigo-950/50 p-6 shadow-[0_12px_36px_rgba(15,23,42,0.3)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
+              className={`group rounded-2xl border bg-indigo-950/55 hover:bg-indigo-950/75 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_16px_38px_rgba(15,23,42,0.38)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between ${item.accent}`}
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
@@ -525,7 +523,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('Resume')}
-            className="group text-left rounded-2xl border border-white/25 bg-indigo-950/35 hover:bg-indigo-950/50 p-6 flex items-start gap-4 hover:border-cyan-300/60 transition-all shadow-[0_12px_36px_rgba(15,23,42,0.3)]"
+            className="group text-left rounded-2xl border border-white/25 bg-indigo-950/55 hover:bg-indigo-950/75 p-6 flex items-start gap-4 hover:border-cyan-300/60 transition-all shadow-[0_14px_36px_rgba(15,23,42,0.38)]"
           >
             <div className="p-3 rounded-xl bg-cyan-500/20 border border-cyan-300/35 text-cyan-200 shrink-0">
               <Briefcase size={20} />
@@ -550,7 +548,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('Resume')}
-            className="group text-left rounded-2xl border border-white/25 bg-indigo-950/35 hover:bg-indigo-950/50 p-6 flex items-start gap-4 hover:border-amber-300/60 transition-all shadow-[0_12px_36px_rgba(15,23,42,0.3)]"
+            className="group text-left rounded-2xl border border-white/25 bg-indigo-950/55 hover:bg-indigo-950/75 p-6 flex items-start gap-4 hover:border-amber-300/60 transition-all shadow-[0_14px_36px_rgba(15,23,42,0.38)]"
           >
             <div className="p-3 rounded-xl bg-amber-400/20 border border-amber-300/35 text-amber-200 shrink-0">
               <CircuitBoard size={20} />
@@ -574,9 +572,36 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         </div>
       </section>
 
+      {/* ── TECH STACK SEAMLESS TICKER (bottom) ── */}
+      <section className="relative z-10 mb-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-center">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-indigo-100/75">
+            Core Technologies &amp; Tooling
+          </span>
+        </div>
+        <div
+          className="overflow-hidden"
+          style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
+        >
+          <div className="animate-ticker">
+            {[...TECH_STACK, ...TECH_STACK].map((tech, idx) => (
+              <div key={`${tech}-${idx}`} className="pr-4 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('Skills')}
+                  className="inline-block px-5 py-2.5 bg-indigo-950/60 hover:bg-indigo-950/85 border border-white/20 hover:border-amber-200/70 rounded-full text-white hover:text-amber-200 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-colors duration-200"
+                >
+                  {tech}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── BOTTOM CTA ── */}
       <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="relative rounded-3xl border border-white/25 bg-indigo-950/35 p-10 md:p-12 text-center overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.35)]">
+        <div className="relative rounded-3xl border border-white/25 bg-indigo-950/55 p-10 md:p-12 text-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_24px_60px_rgba(15,23,42,0.42)]">
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-cyan-400/10 pointer-events-none" />
           <Server size={40} className="text-amber-200 mx-auto mb-5" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -600,7 +625,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('Skills')}
-              className="px-7 py-3.5 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02]"
+              className="px-7 py-3.5 bg-indigo-950/60 hover:bg-indigo-950/80 border border-white/30 hover:border-white/55 text-white font-bold rounded-xl transition-all duration-300 hover:scale-[1.02]"
             >
               View Skills
             </button>

@@ -51,10 +51,10 @@ void main() {
   float field = waveField(sampleUv, uTime);
   float threshold = bayer4x4(cell);
 
-  vec3 deepIndigo = vec3(0.14, 0.20, 0.52);
-  vec3 cobalt = vec3(0.24, 0.38, 0.78);
-  vec3 violet = vec3(0.46, 0.28, 0.78);
-  vec3 coral = vec3(0.84, 0.45, 0.64);
+  vec3 deepIndigo = vec3(0.055, 0.08, 0.28);
+  vec3 cobalt = vec3(0.11, 0.20, 0.56);
+  vec3 violet = vec3(0.28, 0.14, 0.52);
+  vec3 coral = vec3(0.46, 0.22, 0.52);
 
   float band = smoothstep(0.08, 0.96, field);
   vec3 tone;
@@ -67,7 +67,7 @@ void main() {
   }
 
   float ditherMask = step(threshold, clamp(band * 1.15 - 0.1, 0.0, 1.0));
-  vec3 finalColor = mix(tone * 0.88, tone * 1.1, ditherMask);
+  vec3 finalColor = mix(tone * 0.78, tone * 1.04, ditherMask);
 
   gl_FragColor = vec4(finalColor, 1.0);
 }

@@ -8,7 +8,7 @@ interface FooterProps {
   onNavigate: (page: string) => void;
 }
 
-const CONTACT_EMAIL = 'sabareesgodkiller@gmail.com';
+const CONTACT_EMAIL = 'sabareesgodem@gmail.com';
 
 const LiveClock: React.FC = () => {
   const [time, setTime] = useState(new Date());
@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent blur-sm" />
       </div>
 
-      <div className="relative bg-indigo-950/45 border-t border-white/20">
+      <div className="relative bg-indigo-950/65 border-t border-white/20">
         {/* Subtle dot grid */}
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -147,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <button
                       type="button"
                       onClick={() => onNavigate(item.page)}
-                      className="group w-full flex items-center justify-between text-left px-3 py-2 rounded-xl bg-white/12 hover:bg-white/20 border border-white/20 hover:border-white/45 transition-all duration-200"
+                      className="group w-full flex items-center justify-between text-left px-3 py-2 rounded-xl bg-indigo-950/45 hover:bg-indigo-950/70 border border-white/20 hover:border-white/45 transition-all duration-200"
                     >
                       <div>
                         <div className="text-sm font-semibold text-white group-hover:text-amber-200 transition-colors">
@@ -171,7 +171,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 Get In Touch
               </h3>
 
-              <div className="relative rounded-2xl border border-white/25 bg-white/12 p-5 overflow-hidden group hover:border-white/45 transition-colors duration-300">
+              <div className="relative rounded-2xl border border-white/25 bg-indigo-950/50 p-5 overflow-hidden group hover:border-white/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-colors duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-2">

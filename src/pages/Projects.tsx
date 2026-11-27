@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { AiModal } from '../components/AiModal';
 import {
-  Github, Globe, Sparkles, Cpu, Code, Bot, Smartphone,
+  Github, Globe, Sparkles, Cpu, Code, Bot,
   ExternalLink, Search, X, Layers, FolderOpen
 } from 'lucide-react';
 import { suggestProjectDescription } from '../lib/gemini';
 
-export type ProjectCategory = 'All' | 'IoT' | 'Web' | 'Robotics' | 'Mobile';
+export type ProjectCategory = 'All' | 'IoT' | 'Web' | 'Robotics';
 
 interface Project {
   title: string;
@@ -149,7 +149,7 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const CATEGORIES: ProjectCategory[] = ['All', 'IoT', 'Web', 'Robotics', 'Mobile'];
+const CATEGORIES: ProjectCategory[] = ['All', 'IoT', 'Web', 'Robotics'];
 
 const StatCounter: React.FC<{ value: number; suffix: string; label: string }> = ({ value, suffix, label }) => {
   const [count, setCount] = useState(0);
@@ -216,7 +216,6 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
       IoT: 0,
       Web: 0,
       Robotics: 0,
-      Mobile: 0,
     };
     PROJECTS.forEach((p) => {
       counts[p.category] += 1;
@@ -255,17 +254,17 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/15 border border-white/25 rounded-full text-cyan-200 text-sm font-semibold mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-950/55 border border-white/25 rounded-full text-cyan-200 text-sm font-semibold mb-5">
               <Code size={16} />
               Featured Work
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_20px_rgba(15,23,42,0.5)]">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-[0_4px_20px_rgba(15,23,42,0.65)]">
               My{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-amber-200">
                 Projects
               </span>
             </h1>
-            <p className="text-white/95 text-base sm:text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(15,23,42,0.55)]">
+            <p className="text-white/95 text-base sm:text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(15,23,42,0.75)]">
               A selection of my engineering work across hardware systems, embedded firmware, robotics, and full-stack web apps.
             </p>
           </div>
@@ -273,7 +272,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
           <button
             type="button"
             onClick={() => setIsAiModalOpen(true)}
-            className="group flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 border border-white/25 hover:border-cyan-200/60 text-white rounded-xl transition-all duration-300 shadow-lg"
+            className="group flex items-center gap-2 px-5 py-2.5 bg-indigo-950/55 hover:bg-indigo-950/75 border border-white/25 hover:border-cyan-200/60 text-white rounded-xl transition-all duration-300 shadow-lg"
           >
             <Sparkles size={18} className="text-amber-200 group-hover:animate-pulse" />
             <span className="font-semibold text-sm">AI Project Suggester</span>
@@ -281,7 +280,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/20 rounded-2xl overflow-hidden border border-white/25 shadow-[0_14px_36px_rgba(15,23,42,0.28)] mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/20 rounded-2xl overflow-hidden border border-white/25 shadow-[0_14px_36px_rgba(15,23,42,0.35)] mb-10">
           {[
             { value: 15, suffix: '+', label: 'Personal Builds' },
             { value: 4, suffix: '', label: 'Core Disciplines' },
@@ -290,7 +289,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-indigo-950/35 hover:bg-indigo-950/50 py-6 px-4 transition-colors duration-300"
+              className="bg-indigo-950/55 hover:bg-indigo-950/70 py-6 px-4 transition-colors duration-300"
             >
               <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
             </div>
@@ -310,7 +309,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
                     isActive
                       ? 'bg-white text-indigo-950 shadow-[0_0_20px_rgba(255,255,255,0.35)] border border-white'
-                      : 'bg-white/15 text-white hover:bg-white/25 border border-white/25'
+                      : 'bg-indigo-950/55 text-white hover:bg-indigo-950/75 border border-white/25'
                   }`}
                 >
                   <span>{category}</span>
@@ -327,21 +326,21 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
           </div>
 
           <div className="relative w-full lg:w-72">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/75" />
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-100/80" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects or tech..."
               aria-label="Search projects or technologies"
-              className="w-full pl-10 pr-9 py-2.5 bg-white/15 border border-white/25 focus:border-white/60 rounded-xl text-sm text-white placeholder:text-white/65 focus:outline-none transition-colors"
+              className="w-full pl-10 pr-9 py-2.5 bg-indigo-950/55 border border-white/25 focus:border-white/60 rounded-xl text-sm text-white placeholder:text-indigo-100/70 focus:outline-none transition-colors"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/75 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/80 hover:text-white"
               >
                 <X size={15} />
               </button>
@@ -352,12 +351,16 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
         {/* Projects Grid or Empty State */}
         {filteredProjects.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
-            {filteredProjects.map((project, index) => (
-              <div
-                key={project.title}
-                className="group relative flex flex-col justify-between bg-indigo-950/35 hover:bg-indigo-950/50 border border-white/25 hover:border-white/45 rounded-3xl p-5 sm:p-8 shadow-[0_16px_40px_rgba(15,23,42,0.3)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden animate-fade-up"
-                style={{ animationDelay: `${index * 0.06}s` }}
-              >
+            {filteredProjects.map((project, index) => {
+              const spanFull = index === 0 && filteredProjects.length % 2 === 1;
+              return (
+                <div
+                  key={project.title}
+                  className={`group relative flex flex-col justify-between bg-indigo-950/55 hover:bg-indigo-950/75 border border-white/25 hover:border-white/45 rounded-3xl p-5 sm:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_16px_40px_rgba(15,23,42,0.38)] transition-all duration-300 hover:-translate-y-1.5 overflow-hidden animate-fade-up ${
+                    spanFull ? 'md:col-span-2' : ''
+                  }`}
+                  style={{ animationDelay: `${index * 0.06}s` }}
+                >
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${project.bgGlow}`} />
 
                 <div className="relative z-10">
@@ -427,22 +430,17 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
-          <div className="rounded-3xl border border-white/25 bg-indigo-950/35 p-8 sm:p-12 text-center max-w-2xl mx-auto">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-zinc-800/80 border border-zinc-700 flex items-center justify-center text-zinc-400 mb-5">
-              {activeCategory === 'Mobile' ? <Smartphone size={26} className="text-orange-400" /> : <FolderOpen size={26} />}
+          <div className="rounded-3xl border border-white/25 bg-indigo-950/55 p-8 sm:p-12 text-center max-w-2xl mx-auto">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center text-white mb-5">
+              <FolderOpen size={26} />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              {activeCategory === 'Mobile' && !searchQuery
-                ? 'Mobile Projects Coming Soon'
-                : 'No matching projects found'}
-            </h3>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-              {activeCategory === 'Mobile' && !searchQuery
-                ? 'My Android Studio and React Native hardware-interface projects are being prepared for public showcase. Meanwhile, explore my mobile stack on the Skills page or browse other categories.'
-                : 'Try clearing your search term or switching back to all project categories.'}
+            <h3 className="text-xl font-bold text-white mb-2">No matching projects found</h3>
+            <p className="text-white/90 text-sm leading-relaxed mb-6">
+              Try clearing your search term or switching back to all project categories.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <button
@@ -451,7 +449,7 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                   setActiveCategory('All');
                   setSearchQuery('');
                 }}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-white hover:bg-amber-100 text-indigo-950 text-sm font-bold transition-colors"
               >
                 Show All Projects
               </button>
@@ -459,9 +457,9 @@ export const Projects: React.FC<ProjectsProps> = ({ initialCategory = 'All', onN
                 <button
                   type="button"
                   onClick={() => onNavigate('Skills')}
-                  className="px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-sm font-semibold transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white text-sm font-semibold transition-colors"
                 >
-                  View Mobile Skills
+                  View Full Stack
                 </button>
               )}
             </div>

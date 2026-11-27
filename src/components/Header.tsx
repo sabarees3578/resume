@@ -47,11 +47,12 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
               hoverEffect
               style={
                 {
-                  '--gn-frame': 'rgba(255, 255, 255, 0.14)',
-                  '--gn-frame-edge': 'rgba(255, 255, 255, 0.28)',
-                  '--gn-frame-highlight': 'rgba(255, 255, 255, 0.24)',
+                  '--gn-frame': 'rgba(30, 27, 75, 0.62)',
+                  '--gn-frame-edge': 'rgba(255, 255, 255, 0.26)',
+                  '--gn-frame-highlight': 'rgba(255, 255, 255, 0.22)',
                   '--gn-frame-shadow':
-                    '0 12px 32px -10px rgba(15, 23, 42, 0.4), 0 0 24px -6px rgba(99, 102, 241, 0.25)',
+                    '0 14px 34px -10px rgba(15, 23, 42, 0.55), 0 0 24px -6px rgba(99, 102, 241, 0.3)',
+                  '--gn-muted': 'rgba(255, 255, 255, 0.82)',
                   '--gn-x': 'clamp(11px, 2.6vw, 22px)',
                   '--gn-y': 'clamp(8px, 1.4vw, 11px)',
                   '--gn-gap': 'clamp(2px, 0.9vw, 8px)',
@@ -67,10 +68,10 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
           {/* Right primary Contact CTA */}
           <div className="hidden md:flex items-center justify-end pointer-events-auto">
             <a
-              href="mailto:sabareesgodkiller@gmail.com"
+              href="mailto:sabareesgodem@gmail.com"
               aria-label="Contact Sabarees via Email"
               title="Email Sabarees"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/30 backdrop-blur-md text-white text-xs sm:text-sm font-semibold transition-all shadow-[0_8px_24px_rgba(15,23,42,0.25)] hover:shadow-[0_10px_28px_rgba(99,102,241,0.35)]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-950/60 hover:bg-indigo-900/75 border border-white/25 hover:border-white/45 backdrop-blur-md text-white text-xs sm:text-sm font-semibold transition-all shadow-[0_8px_24px_rgba(15,23,42,0.35)] hover:shadow-[0_10px_28px_rgba(99,102,241,0.4)]"
             >
               <Mail size={15} />
               <span>Contact</span>
